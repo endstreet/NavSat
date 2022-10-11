@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NavSat.Core.ApiClients {
@@ -27,8 +28,23 @@ namespace NavSat.Core.ApiClients {
 
                 var uri = $"{_config.BaseUrl}/{utc.Year}/{utc.Month}/{utc.Day}";
 
+                string json = "";
                 // TODO: Add Error Handling
-                var json = await httpClient.GetStringAsync(uri);
+                try
+                {
+                    json = await httpClient.GetStringAsync(uri);
+                }
+                catch (HttpRequestException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    //Lets ignore other errors now for brevity.
+                }
+
+                //var json = await httpClient.GetStringAsync(uri);
+
 
                 var far = JsonConvert.DeserializeObject<FullAlmanacResponse>(json);
                 //Todo: test
