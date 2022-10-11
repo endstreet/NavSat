@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavSat.Core.Abstrations", "NavSat.Core.Abstrations\NavSat.Core.Abstrations.csproj", "{431FED8F-DC5A-41CD-AD5C-8A4A6822FE4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavSat.Core.Abstrations", "NavSat.Core.Abstrations\NavSat.Core.Abstrations.csproj", "{431FED8F-DC5A-41CD-AD5C-8A4A6822FE4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavSat.Core", "NavSat.Core\NavSat.Core.csproj", "{BCA5E520-D3A7-4AFA-BDD5-5758D5C42895}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavSat.Core", "NavSat.Core\NavSat.Core.csproj", "{BCA5E520-D3A7-4AFA-BDD5-5758D5C42895}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C455A8D0-51F8-403F-8072-4331E2644246}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavSat.Core.Tests", "Tests\NavSat.Core.Tests\NavSat.Core.Tests.csproj", "{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavSat.Core.Tests", "Tests\NavSat.Core.Tests\NavSat.Core.Tests.csproj", "{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavSat.Api", "NavSat.Api\NavSat.Api.csproj", "{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
