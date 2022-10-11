@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -5,7 +6,6 @@ using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.ApiClients;
-using NavSat.Core.ApiClients.Mappers;
 using NavSat.Core.Services;
 //using NUnit.Framework;
 using System;
@@ -25,9 +25,10 @@ namespace NavSat.Core.Tests {
             var services = new ServiceCollection();
             services.AddSingleton<IOrbitApiClientConfig, TestConfig>(x => 
             new TestConfig());
-            services.AddScoped<ISatOrbitMapper, SatOrbitMapper>();
+            //services.AddScoped<ISatOrbitMapper, SatOrbitMapper>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IOrbitApiClient, OrbitApiClient>(x =>
-            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<ISatOrbitMapper>()));
+            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<IMapper>()));
             services.AddScoped<IConstellationService, ConstellationService>();
             services.AddScoped<IGeoMath, GeoMath>();
             services.AddScoped<ISatMath, SatMath>();

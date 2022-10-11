@@ -1,10 +1,10 @@
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Services;
-using NavSat.Core.ApiClients.Mappers;
 using NavSat.Core.ApiClients;
 using NavSat.Core.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Configuration;
+using AutoMapper;
 
 namespace NavSat.Api
 {
@@ -17,9 +17,9 @@ namespace NavSat.Api
             // Add services to the container.
             builder.Services.AddSingleton<IOrbitApiClientConfig, OrbitApiClientConfig>(x =>
             new OrbitApiClientConfig(builder.Configuration.GetValue<string>("OrbitApi:BaseUrl")));
-            builder.Services.AddScoped<ISatOrbitMapper, SatOrbitMapper>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<IOrbitApiClient, OrbitApiClient>(x =>
-            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<ISatOrbitMapper>()));
+            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<IMapper>()));
             builder.Services.AddScoped<IConstellationService, ConstellationService>();
             builder.Services.AddScoped<IGeoMath, GeoMath>();
             builder.Services.AddScoped<ISatMath, SatMath>();
