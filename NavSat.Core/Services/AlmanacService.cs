@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NavSat.Core.Services {
-    public class AlmanacService : IAlmanacService {
+namespace NavSat.Core.Services
+{
+    public class AlmanacService : IAlmanacService
+    {
 
         private static double rotrat = 7.293715E-05;
         private static double gm = 3.986005E+14;
@@ -19,7 +21,8 @@ namespace NavSat.Core.Services {
         private readonly IGeoMath _geoMath;
 
 
-        public AlmanacService(ISatelliteService satService, IConstellationService satSystemService, IGeoMath geoMath) {
+        public AlmanacService(ISatelliteService satService, IConstellationService satSystemService, IGeoMath geoMath)
+        {
 
             this._satService = satService;
             this._satSystemService = satSystemService;
@@ -29,15 +32,19 @@ namespace NavSat.Core.Services {
 
         }
 
-        public void DefineCurtain(double[] curtain) {
-            if (curtain.Length > 0) {
+        public void DefineCurtain(double[] curtain)
+        {
+            if (curtain.Length > 0)
+            {
                 _curtain = new double[curtain.Length];
                 curtain.CopyTo(_curtain, 0);
             }
         }
 
-        public void Add(IEnumerable<SatelliteOrbit> satAlms) {
-            foreach (SatelliteOrbit satAlm in satAlms) {
+        public void Add(IEnumerable<SatelliteOrbit> satAlms)
+        {
+            foreach (SatelliteOrbit satAlm in satAlms)
+            {
                 var gpsTime = new GPSTime(satAlm.GpsWeek, satAlm.GpsSeconds);
                 if (gpsTime.DateTimeUTC > AlmanacTimeUTC)
                     AlmanacTimeUTC = new DateTime(gpsTime.DateTimeUTC.Ticks, DateTimeKind.Utc);
@@ -46,16 +53,19 @@ namespace NavSat.Core.Services {
             }
         }
 
-        public DateTime AlmanacTimeUTC {
+        public DateTime AlmanacTimeUTC
+        {
             get;
             private set;
         }
 
-        public bool GetSatellitePosition(IGPSTime time, Satellite sat, double[] pos, out double az, out double el, out double[] xecf) {
+        public bool GetSatellitePosition(IGPSTime time, Satellite sat, double[] pos, out double az, out double el, out double[] xecf)
+        {
             long rtime = Convert.ToInt64(time.RogueTime);
             xecf = new double[3];
 
-            if (!CalculateXYZ(time, sat, out xecf)) {
+            if (!CalculateXYZ(time, sat, out xecf))
+            {
                 az = 0.0;
                 el = 0.0;
                 return false;
@@ -66,7 +76,8 @@ namespace NavSat.Core.Services {
         }
 
         public IEnumerable<Satellite> GetDops(IEnumerable<Constellation> systems, IGPSTime time, double elev_cutoff, double[] pos, int[] availbaleSatIds,
-              out double gDOP, out double tDOP, out double pDOP, out double hDOP, out double vDOP) {
+              out double gDOP, out double tDOP, out double pDOP, out double hDOP, out double vDOP)
+        {
 
             // Set default return values.
             gDOP = tDOP = pDOP = hDOP = vDOP = double.NaN;
@@ -90,7 +101,8 @@ namespace NavSat.Core.Services {
             double[,] design = new double[visibleSats.Count(), 8];
 
             int n = 0;
-            foreach (Satellite sat in visibleSats) {
+            foreach (Satellite sat in visibleSats)
+            {
                 if (availbaleSatIds != null && !availbaleSatIds.Contains(sat.Id))
                     continue;
 
@@ -121,7 +133,8 @@ namespace NavSat.Core.Services {
 
             bool enoughSat = true;
             int sumSat = 0;
-            for (int i = 0; i < ST_COUNT; ++i) {
+            for (int i = 0; i < ST_COUNT; ++i)
+            {
                 sumSat += numSats[i];
                 if (numSats[i] < 4)
                     enoughSat = false;
@@ -162,8 +175,10 @@ namespace NavSat.Core.Services {
 
             double[,] T = CalcT(a, b);
 
-            for (int k = 0; k < 3; k++) {
-                for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 3; k++)
+            {
+                for (int i = 0; i < 3; i++)
+                {
                     Temp[i, k] = 0.0;
                     for (int j = 0; j < 3; j++)
                         Temp[i, k] = Temp[i, k] + T[i, j] * Cov[j, k];
@@ -171,8 +186,10 @@ namespace NavSat.Core.Services {
             }
 
             double[,] Cplh = new double[3, 3];
-            for (int k = 0; k < 3; k++) {
-                for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 3; k++)
+            {
+                for (int i = 0; i < 3; i++)
+                {
                     Cplh[i, k] = 0.0;
                     for (int j = 0; j < 3; j++)
                         Cplh[i, k] = Cplh[i, k] + Temp[i, j] * T[k, j];
@@ -185,13 +202,15 @@ namespace NavSat.Core.Services {
             return usedSats;
         }
 
-        public IEnumerable<Satellite> GetSats(IEnumerable<Constellation> systems, IGPSTime time) {
+        public IEnumerable<Satellite> GetSats(IEnumerable<Constellation> systems, IGPSTime time)
+        {
             var ret = new List<Satellite>();
 
             double[] pos = new double[] { 0, 0, 0 };
             double azSat, elSat;
             double[] satEcef;
-            foreach (Satellite sat in GetSatellites(systems)) {
+            foreach (Satellite sat in GetSatellites(systems))
+            {
                 if (!GetSatellitePosition(time, sat, pos, out azSat, out elSat, out satEcef))
                     continue;
 
@@ -202,12 +221,14 @@ namespace NavSat.Core.Services {
             return ret;
         }
 
-        public IEnumerable<Satellite> GetVisibleSats(IEnumerable<Constellation> systems, IGPSTime time, double cutoff, double[] pos) {
+        public IEnumerable<Satellite> GetVisibleSats(IEnumerable<Constellation> systems, IGPSTime time, double cutoff, double[] pos)
+        {
             var ret = new List<Satellite>();
 
             double azSat, elSat;
             double[] satEcef;
-            foreach (Satellite sat in GetSatellites(systems)) {
+            foreach (Satellite sat in GetSatellites(systems))
+            {
                 //if ( !_Almanac[sat].IsHealthy )
                 //    continue;
 
@@ -222,7 +243,8 @@ namespace NavSat.Core.Services {
             return ret;
         }
 
-        private IEnumerable<Satellite> GetSatellites(IEnumerable<Constellation> systems) {
+        private IEnumerable<Satellite> GetSatellites(IEnumerable<Constellation> systems)
+        {
 
             var allSystems = _satSystemService.All();
 
@@ -236,19 +258,23 @@ namespace NavSat.Core.Services {
             return q.ToList();
         }
 
-        public SatelliteOrbit GetSatelliteById(int id) {
+        public SatelliteOrbit GetSatelliteById(int id)
+        {
             return _almanac.Values.Where(sa => sa.SatId == id).SingleOrDefault();
         }
 
-        public IEnumerable<SatelliteOrbit> FullAlmanac {
-            get {
+        public IEnumerable<SatelliteOrbit> FullAlmanac
+        {
+            get
+            {
                 return _almanac.Values.ToList();
             }
         }
 
         #region Helper Methods
 
-        private bool CalculateXYZ(IGPSTime time, Satellite sat, out double[] xyz) {
+        private bool CalculateXYZ(IGPSTime time, Satellite sat, out double[] xyz)
+        {
             long rtime = Convert.ToInt64(time.RogueTime);
 
             double cosi, scom, ccom, xpl, ypl, com, m0, dt, ec, radius;
@@ -257,7 +283,8 @@ namespace NavSat.Core.Services {
 
             SatelliteOrbit ALM = _almanac[sat];
 
-            if (ALM.RootOfSemiMajorAxis <= 0.0 || Math.Abs(ALM.SatId) != sat.Id) {
+            if (ALM.RootOfSemiMajorAxis <= 0.0 || Math.Abs(ALM.SatId) != sat.Id)
+            {
                 // RK: We have problems with an almanac
                 //     which provides all satellites regardless
                 //     their visibility!
@@ -298,7 +325,8 @@ namespace NavSat.Core.Services {
             return true;
         }
 
-        private double EccAnom(double ec, double m) {
+        private double EccAnom(double ec, double m)
+        {
             // arguments:
             // ec=eccentricity, m=mean anomaly,
 
@@ -314,7 +342,8 @@ namespace NavSat.Core.Services {
             double E = M;
             double F = E - ec * Math.Sin(m) - m;
 
-            while (Math.Abs(F) > delta && i < maxIter) {
+            while (Math.Abs(F) > delta && i < maxIter)
+            {
                 E = E - F / (1.0 - ec * Math.Cos(E));
                 F = E - ec * Math.Sin(E) - m;
                 i = i + 1;
@@ -322,12 +351,14 @@ namespace NavSat.Core.Services {
             return E;
         }
 
-        private void UpdateCov(int n, double[,] cov, double[,] design) {
+        private void UpdateCov(int n, double[,] cov, double[,] design)
+        {
             double[] h = new double[8];
             double sum = 0.0;
             int i, j;
 
-            for (i = 0; i < 8; i++) {
+            for (i = 0; i < 8; i++)
+            {
                 h[i] = 0.0;
                 for (j = 0; j < 8; j++)
                     h[i] += cov[i, j] * design[n, j];
@@ -340,11 +371,13 @@ namespace NavSat.Core.Services {
                     cov[i, j] -= sum * h[i] * h[j];
         }
 
-        private void UpdateDesign(int n, Satellite sat, double[,] design, int[] numSats) {
+        private void UpdateDesign(int n, Satellite sat, double[,] design, int[] numSats)
+        {
 
             var system = _satSystemService.For(sat);
 
-            if (system == _satSystemService.GPS()) {
+            if (system == _satSystemService.GPS())
+            {
                 numSats[0]++;
                 design[n, 3] = 1.0;
                 design[n, 4] = 0.0;
@@ -352,7 +385,8 @@ namespace NavSat.Core.Services {
                 design[n, 6] = 0.0;
                 design[n, 7] = 0.0;
             }
-            else if (system == _satSystemService.Glonass()) {
+            else if (system == _satSystemService.Glonass())
+            {
                 numSats[1]++;
 
                 design[n, 3] = 0.0;
@@ -361,7 +395,8 @@ namespace NavSat.Core.Services {
                 design[n, 6] = 0.0;
                 design[n, 7] = 0.0;
             }
-            else if (system == _satSystemService.Galileo()) {
+            else if (system == _satSystemService.Galileo())
+            {
                 numSats[2]++;
                 design[n, 3] = 0.0;
                 design[n, 4] = 0.0;
@@ -369,7 +404,8 @@ namespace NavSat.Core.Services {
                 design[n, 6] = 0.0;
                 design[n, 7] = 0.0;
             }
-            else if (system == _satSystemService.Compass()) {
+            else if (system == _satSystemService.Compass())
+            {
                 numSats[3]++;
                 design[n, 3] = 0.0;
                 design[n, 4] = 0.0;
@@ -377,7 +413,8 @@ namespace NavSat.Core.Services {
                 design[n, 6] = 1.0;
                 design[n, 7] = 0.0;
             }
-            else if (system == _satSystemService.QZSS()) {
+            else if (system == _satSystemService.QZSS())
+            {
                 numSats[4]++;
                 design[n, 3] = 0.0;
                 design[n, 4] = 0.0;
@@ -390,7 +427,8 @@ namespace NavSat.Core.Services {
 
         #region  TODO:  Move these to a math service??
 
-        private double[,] CalcT(double lat, double lon) {
+        private double[,] CalcT(double lat, double lon)
+        {
             double[,] T = new double[4, 4];
 
             T[0, 0] = -Math.Sin(lat) * Math.Cos(lon);
@@ -406,13 +444,15 @@ namespace NavSat.Core.Services {
             return T;
         }
 
-        private bool IsVisible(double az, double el, double cutoff) {
+        private bool IsVisible(double az, double el, double cutoff)
+        {
             if (el < cutoff)
                 return false;
             return !InObstacle(az, el);
         }
 
-        private bool InObstacle(double az, double el) {
+        private bool InObstacle(double az, double el)
+        {
             if (_curtain == null)
                 return false;
 
@@ -423,7 +463,8 @@ namespace NavSat.Core.Services {
             return false;
         }
 
-        private int VectorToElAz(double[] stat, double[] xecf, out double azimuth, out double elevation) {
+        private int VectorToElAz(double[] stat, double[] xecf, out double azimuth, out double elevation)
+        {
             double[] rhoe = new double[3];
             double rhoe_norm;             // magnitude of rhoe vector
             double rho;
@@ -466,12 +507,14 @@ namespace NavSat.Core.Services {
             double d2sq = d1sq + stat_z * stat_z;
             double d2 = Math.Sqrt(d2sq);        // distance in x, y and z
             double slat, clat;
-            if (d2 < 1e-6) { // we are near the center of earth, good GPS reception here ...
+            if (d2 < 1e-6)
+            { // we are near the center of earth, good GPS reception here ...
                 d2 = 1e-6;
                 slat = 0.0;
                 clat = 1.0;
             }
-            else {
+            else
+            {
                 slat = stat_z / d2;
                 clat = d1 / d2;
             }
@@ -530,14 +573,16 @@ namespace NavSat.Core.Services {
             return 1;
         }
 
-        private double VectorSub(double[] xecf, double[] stat, out double[] rhoe) {
+        private double VectorSub(double[] xecf, double[] stat, out double[] rhoe)
+        {
             if (xecf.Length != stat.Length)
                 throw new ArgumentException();
 
             rhoe = new double[xecf.Length];
             double sum = 0;
 
-            for (int i = 0; i < xecf.Length; ++i) {
+            for (int i = 0; i < xecf.Length; ++i)
+            {
                 rhoe[i] = xecf[i] - stat[i];
                 sum += rhoe[i] * rhoe[i];
             }

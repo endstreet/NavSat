@@ -1,11 +1,14 @@
 ﻿using System;
 
-namespace NavSat.Core.Abstrations.Models {
-    public class Satellite : IComparable {
+namespace NavSat.Core.Abstrations.Models
+{
+    public class Satellite : IComparable
+    {
 
         public Satellite() { }
 
-        public Satellite(int id, int prn, string system) {
+        public Satellite(int id, int prn, string system)
+        {
             Id = id;
             Prn = prn;
             Constellation = system;
@@ -17,26 +20,31 @@ namespace NavSat.Core.Abstrations.Models {
 
         public string Constellation { get; private set; }
 
-        public string DisplayName {
-            get {
+        public string DisplayName
+        {
+            get
+            {
                 return ToString();
             }
         }
 
         #region Overrides
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             Satellite rhs = obj as Satellite;
             if (rhs == null)
                 return false;
             return Id.Equals(rhs.Id);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Id.GetHashCode();
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("{0}{1:00}", Constellation, Prn);
         }
 
@@ -44,7 +52,8 @@ namespace NavSat.Core.Abstrations.Models {
 
         #region IComparable Members
 
-        public int CompareTo(object obj) {
+        public int CompareTo(object obj)
+        {
             Satellite rhs = obj as Satellite;
             if (rhs == null)
                 throw new InvalidOperationException();

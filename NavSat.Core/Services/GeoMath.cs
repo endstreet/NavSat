@@ -1,23 +1,28 @@
 ﻿using NavSat.Core.Abstrations.Services;
 using System;
 
-namespace NavSat.Core.Services {
-    public class GeoMath : IGeoMath {
+namespace NavSat.Core.Services
+{
+    public class GeoMath : IGeoMath
+    {
 
         private static double WGS_A = 6378137.0;
         private static double WGS_B = 6356752.3142;
         private static double WGS_E2 = 0.00669437999013;
         private static double WGS_ES2 = 0.00673949674227;
 
-        public double Rad2Deg(double rad) {
+        public double Rad2Deg(double rad)
+        {
             return rad / Math.PI * 180.0;
         }
 
-        public double Deg2Rad(double deg) {
+        public double Deg2Rad(double deg)
+        {
             return deg / 180.0 * Math.PI;
         }
 
-        public double[] Geo2Ecef(double lat, double lon, double hgt) {
+        public double[] Geo2Ecef(double lat, double lon, double hgt)
+        {
             double temp;
             double N;
 
@@ -34,7 +39,8 @@ namespace NavSat.Core.Services {
             return xyz;
         }
 
-        public void Ecef2Geo(double[] xyz, out double lat, out double lon, out double hgt) {
+        public void Ecef2Geo(double[] xyz, out double lat, out double lon, out double hgt)
+        {
             double p, temp, p1, p2, u;
             double theta, stheta, ctheta;
 
@@ -57,7 +63,8 @@ namespace NavSat.Core.Services {
         }
 
 
-        public double[] EcefToElAz(double[] stat, double[] xecf) {
+        public double[] EcefToElAz(double[] stat, double[] xecf)
+        {
 
             double elevation = 0;
             double azimuth = 0;
@@ -105,12 +112,14 @@ namespace NavSat.Core.Services {
             double d2sq = d1sq + stat_z * stat_z;
             double d2 = Math.Sqrt(d2sq);        // distance in x, y and z
             double slat, clat;
-            if (d2 < 1e-6) { // we are near the center of earth, good GPS reception here ...
+            if (d2 < 1e-6)
+            { // we are near the center of earth, good GPS reception here ...
                 d2 = 1e-6;
                 slat = 0.0;
                 clat = 1.0;
             }
-            else {
+            else
+            {
                 slat = stat_z / d2;
                 clat = d1 / d2;
             }
@@ -174,14 +183,16 @@ namespace NavSat.Core.Services {
 
 
 
-        private double VectorSub(double[] xecf, double[] stat, out double[] rhoe) {
+        private double VectorSub(double[] xecf, double[] stat, out double[] rhoe)
+        {
             if (xecf.Length != stat.Length)
                 throw new ArgumentException();
 
             rhoe = new double[xecf.Length];
             double sum = 0;
 
-            for (int i = 0; i < xecf.Length; ++i) {
+            for (int i = 0; i < xecf.Length; ++i)
+            {
                 rhoe[i] = xecf[i] - stat[i];
                 sum += rhoe[i] * rhoe[i];
             }

@@ -1,19 +1,24 @@
 ﻿using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
 
-namespace NavSat.Core.Services {
-    public class SatelliteService : ISatelliteService {
+namespace NavSat.Core.Services
+{
+    public class SatelliteService : ISatelliteService
+    {
 
         private readonly IConstellationService satSystemService;
 
-        public SatelliteService(IConstellationService satSystemService) {
+        public SatelliteService(IConstellationService satSystemService)
+        {
             this.satSystemService = satSystemService;
         }
 
-        public Satellite CreateFrom(int satelliteId) {
+        public Satellite CreateFrom(int satelliteId)
+        {
 
             var system = satSystemService.For(satelliteId);
-            if (system == null) {
+            if (system == null)
+            {
                 return null;
             }
 

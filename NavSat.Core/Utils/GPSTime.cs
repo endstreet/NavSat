@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace NavSat.Core.Utils {
+namespace NavSat.Core.Utils
+{
     /// <summary>
     /// This class manages GPS time.
     /// </summary>
-    public class GPSTime : IGPSTime {
+    public class GPSTime : IGPSTime
+    {
         /// <summary>
         /// Seconds since jan 6, 1980
         /// </summary>
@@ -35,7 +37,8 @@ namespace NavSat.Core.Utils {
         /// <summary>
         /// Static constructor used to initialize the leap seconds table.
         /// </summary>
-        static GPSTime() {
+        static GPSTime()
+        {
             InitializeLeapSecondsTable();
         }
 
@@ -43,7 +46,8 @@ namespace NavSat.Core.Utils {
         /// Creates reference GPS time.
         /// Use it to find out what is the DateTime object for this instance.
         /// </summary>
-        public static GPSTime Empty {
+        public static GPSTime Empty
+        {
             get { return new GPSTime(0m); }
         }
 
@@ -52,7 +56,8 @@ namespace NavSat.Core.Utils {
         /// </summary>
         /// <param name="GPSweek">GPS week.</param>
         /// <param name="GPSseconds">GPS second.</param>
-        public GPSTime(int GPSweek, double GPSseconds) {
+        public GPSTime(int GPSweek, double GPSseconds)
+        {
             if (double.IsNaN(GPSseconds) || GPSseconds < 0)
                 throw new ArgumentException("Parameter is invalid", "seconds");
             if (GPSweek < 0)
@@ -67,7 +72,8 @@ namespace NavSat.Core.Utils {
         /// Constructs a new time object with GPS rogue time.
         /// </summary>
         /// <param name="rogueTime">GPS rogue time (absolute seconds since 06.01.1980)</param>
-        public GPSTime(decimal rogueTime) {
+        public GPSTime(decimal rogueTime)
+        {
             if (rogueTime < 0)
                 throw new ArgumentException();
             m_RogueTime = rogueTime;
@@ -83,7 +89,8 @@ namespace NavSat.Core.Utils {
         /// <param name="GPShour">Hour</param>
         /// <param name="GPSminute">Minutes</param>
         /// <param name="GPSseconds">Seconds</param>
-        public GPSTime(int GPSyear, int GPSmonth, int GPSday, int GPShour, int GPSminute, double GPSseconds) {
+        public GPSTime(int GPSyear, int GPSmonth, int GPSday, int GPShour, int GPSminute, double GPSseconds)
+        {
             Set(GPSyear, GPSmonth, GPSday, GPShour, GPSminute, GPSseconds, false);
         }
 
@@ -100,7 +107,8 @@ namespace NavSat.Core.Utils {
         /// <param name="utc">Flag indicating whether the given calendar time is based on UTC 
         /// or GPS timeframe. If this is set true and UTC time is given, the constructor shifts
         /// the time automatically for the actual leap seconds between GPS time.</param>
-        public GPSTime(int year, int month, int day, int hour, int minute, double seconds, bool utc) {
+        public GPSTime(int year, int month, int day, int hour, int minute, double seconds, bool utc)
+        {
             Set(year, month, day, hour, minute, seconds, utc);
         }
 
@@ -110,7 +118,8 @@ namespace NavSat.Core.Utils {
         /// for precise time calculations and comparison.
         /// </summary>
         /// <param name="UTCTime">DateTime reference representing a valid UTC time object.</param>
-        public GPSTime(DateTime UTCTime) {
+        public GPSTime(DateTime UTCTime)
+        {
             double seconds = (double)UTCTime.Second;
             if (UTCTime.Millisecond > 0)
                 seconds += ((double)UTCTime.Millisecond) / 1000;
@@ -122,8 +131,10 @@ namespace NavSat.Core.Utils {
         /// Gets the <see cref="DateTime"/> value for this instance. This time is always shifted by
         /// actual number of leap seconds between GPS and UTC time and belongs to the UTC timeframe.
         /// </summary>
-        public DateTime DateTimeUTC {
-            get {
+        public DateTime DateTimeUTC
+        {
+            get
+            {
                 int year, month, day, hour, minute;
                 double roundedSeconds;
                 GetTimeGPS(out year, out month, out day, out hour, out minute, out roundedSeconds, 3);
@@ -139,7 +150,8 @@ namespace NavSat.Core.Utils {
                 dateTime = dateTime.AddSeconds(-leapSeconds);
 
                 // Test to see if the new datetime has a different leap seconds.
-                if (leapSeconds != GetLeapSeconds(dateTime)) {
+                if (leapSeconds != GetLeapSeconds(dateTime))
+                {
                     // We must be on a boundary, adjust for the difference.
                     dateTime = dateTime.AddSeconds(-(GetLeapSeconds(dateTime) - leapSeconds));
                 }
@@ -160,11 +172,13 @@ namespace NavSat.Core.Utils {
         /// <param name="roundedSeconds">Seconds rounded</param>
         /// <param name="numberOfDecimals">The number of decimals to be rounded</param>
         public void GetTimeGPS(out int year, out int month, out int day, out int hour,
-            out int minute, out double roundedSeconds, int numberOfDecimals) {
+            out int minute, out double roundedSeconds, int numberOfDecimals)
+        {
             GetTimeGPS(out year, out month, out day, out hour, out minute, out roundedSeconds);
             roundedSeconds = System.Math.Round(roundedSeconds, numberOfDecimals);
 
-            if (roundedSeconds >= 60) {
+            if (roundedSeconds >= 60)
+            {
                 // We are here if the seconds of this GPSTime are in [59.5, 60.0[.
                 // Rounding can lead to 60.0.
                 // Adding 0.6 shifts if to [60.1, 60.6[, which is definitely in the next minute.
@@ -185,7 +199,8 @@ namespace NavSat.Core.Utils {
         /// <param name="minute">Minute</param>
         /// <param name="seconds">Seconds</param>
         public void GetTimeGPS(out int year, out int month, out int day, out int hour,
-            out int minute, out double seconds) {
+            out int minute, out double seconds)
+        {
             // This function was ported from the function "caldat" from the book
             // "Numerical Recipes in C"
 
@@ -199,7 +214,8 @@ namespace NavSat.Core.Utils {
             decimal secondsOfDay = Decimal.Subtract(this.m_RogueTime, Decimal.Multiply((decimal)days, DAYSECS));
 
             julian += 2400001;
-            if (julian >= IGREG) {
+            if (julian >= IGREG)
+            {
                 jalpha = (int)(((double)(julian - 1867216) - 0.25) / 36524.25);
                 ja = julian + 1 + jalpha - (int)(0.25 * jalpha);
             }
@@ -231,8 +247,10 @@ namespace NavSat.Core.Utils {
         /// <summary>
         /// Gets GPS week.
         /// </summary>
-        public int Week {
-            get {
+        public int Week
+        {
+            get
+            {
                 return Decimal.ToInt32(Decimal.Divide(m_RogueTime, WEEKSECS));
             }
         }
@@ -240,8 +258,10 @@ namespace NavSat.Core.Utils {
         /// <summary>
         /// Gets GPS seconds.
         /// </summary>
-        public double Seconds {
-            get {
+        public double Seconds
+        {
+            get
+            {
                 int iWeek = Week;
                 decimal dSeconds = Decimal.Subtract(m_RogueTime, Decimal.Multiply(iWeek, WEEKSECS));
                 return Decimal.ToDouble(dSeconds);
@@ -251,7 +271,8 @@ namespace NavSat.Core.Utils {
         /// <summary>
         /// Gets GPS rogue time
         /// </summary>
-        public decimal RogueTime {
+        public decimal RogueTime
+        {
             get { return m_RogueTime; }
         }
 
@@ -260,7 +281,8 @@ namespace NavSat.Core.Utils {
         /// </summary>
         /// <param name="obj">Object to be checked for equality.</param>
         /// <returns>True if the objects are equal, otherwise false.</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj == null)
                 return false;
 
@@ -281,7 +303,8 @@ namespace NavSat.Core.Utils {
         /// object will be used to calculate a proper hash.
         /// </summary>
         /// <returns>A hash code for this time object.</returns>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             // This is ok because m_RogueTime is in fact a readonly field
             return Decimal.Round(m_RogueTime, SIGNIFICANT_DIGITS).GetHashCode();
         }
@@ -292,7 +315,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t1">The first time object.</param>
         /// <param name="t2">The second time object.</param>
         /// <returns>True if both time objects are equals, false if different.</returns>
-        static public bool operator ==(GPSTime t1, GPSTime t2) {
+        static public bool operator ==(GPSTime t1, GPSTime t2)
+        {
             if (object.Equals(t1, null))
                 return object.Equals(t2, null);
 
@@ -305,7 +329,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t1">The first time object.</param>
         /// <param name="t2">The second time object.</param>
         /// <returns>True if both time objects are different, false if equals.</returns>
-        static public bool operator !=(GPSTime t1, GPSTime t2) {
+        static public bool operator !=(GPSTime t1, GPSTime t2)
+        {
             if (object.Equals(t1, null))
                 return !object.Equals(t2, null);
 
@@ -319,7 +344,8 @@ namespace NavSat.Core.Utils {
         /// <param name="obj">An object to compare, or a null reference</param>
         /// <returns>A signed number indicating the relative values of this
         /// instance and value.</returns>
-        public int CompareTo(object obj) {
+        public int CompareTo(object obj)
+        {
             GPSTime rhs = obj as GPSTime;
 
             if (rhs == null)
@@ -341,7 +367,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t2">The second time object.</param>
         /// <returns>True if the first time object is earlier then the 
         /// second time object.</returns>
-        static public bool operator <(GPSTime t1, GPSTime t2) {
+        static public bool operator <(GPSTime t1, GPSTime t2)
+        {
             // One or both comparands can be a null reference.
             // By definition, any string, including the empty string (""),
             // compares greater than a null reference;
@@ -360,7 +387,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t2">The second time object.</param>
         /// <returns>True if the first time object has later time then the 
         /// second time object.</returns>
-        static public bool operator >(GPSTime t1, GPSTime t2) {
+        static public bool operator >(GPSTime t1, GPSTime t2)
+        {
             // One or both comparands can be a null reference.
             // By definition, any string, including the empty string (""),
             // compares greater than a null reference;
@@ -379,7 +407,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t2">The second time object.</param>
         /// <returns>True if the first time object is earlier or equal then the 
         /// second time object.</returns>
-        static public bool operator <=(GPSTime t1, GPSTime t2) {
+        static public bool operator <=(GPSTime t1, GPSTime t2)
+        {
             // One or both comparands can be a null reference.
             // By definition, any string, including the empty string (""),
             // compares greater than a null reference;
@@ -398,7 +427,8 @@ namespace NavSat.Core.Utils {
         /// <param name="t2">The second time object.</param>
         /// <returns>True if the first time object has later or equal time then the 
         /// second time object.</returns>
-        static public bool operator >=(GPSTime t1, GPSTime t2) {
+        static public bool operator >=(GPSTime t1, GPSTime t2)
+        {
             // One or both comparands can be a null reference.
             // By definition, any string, including the empty string (""),
             // compares greater than a null reference;
@@ -412,14 +442,16 @@ namespace NavSat.Core.Utils {
 
         #region Private members
 
-        private void Set(int year, int month, int day, int hour, int minute, double seconds, bool utc) {
+        private void Set(int year, int month, int day, int hour, int minute, double seconds, bool utc)
+        {
             if (month < 1 || month > 12 || day < 1 || day > 31 || hour < 0 || hour > 23
                 || minute < 0 || minute > 59 || seconds < 0.0 || seconds >= 60.0)
                 throw new ArgumentException();
             decimal julianSeconds = cal2mjl(year, month, day, hour, minute, seconds);
             m_RogueTime = Decimal.Subtract(julianSeconds, Decimal.Multiply(MJDDAYS, DAYSECS));
 
-            if (utc) {
+            if (utc)
+            {
                 // Compute the DateTime bases on the given UTC information
                 int iSeconds = (int)seconds;
                 int mSeconds = (int)(seconds - iSeconds) * 1000;
@@ -440,7 +472,8 @@ namespace NavSat.Core.Utils {
         /// <param name="minute"></param>
         /// <param name="secs"></param>
         /// <returns></returns>
-        private static decimal cal2mjl(int year, int month, int day, int hour, int minute, double secs) {
+        private static decimal cal2mjl(int year, int month, int day, int hour, int minute, double secs)
+        {
             // This function was ported from the function "julday" from the book
             // "Numerical Recipes in C"
 
@@ -449,7 +482,8 @@ namespace NavSat.Core.Utils {
 
             if (month > 2)
                 month++;
-            else {
+            else
+            {
                 month += 13;
                 year--;
             }
@@ -473,7 +507,8 @@ namespace NavSat.Core.Utils {
 
         #region Private helper code for LeapSeconds
         private static Dictionary<DateTime, int> s_gpsLeapSeconds = null;
-        private static void InitializeLeapSecondsTable() {
+        private static void InitializeLeapSecondsTable()
+        {
             if (s_ReverseDateTimeComparable == null)
                 s_ReverseDateTimeComparable = new ReverseDateTimeComparable();
 
@@ -509,8 +544,10 @@ namespace NavSat.Core.Utils {
         /// </summary>
         /// <param name="dateTimeUTC">The UTC date to retrieve the leap seconds.</param>
         /// <returns>Returns the number of leap seconds for the given date.</returns>
-        public static int GetLeapSeconds(DateTime dateTimeUTC) {
-            foreach (KeyValuePair<DateTime, int> de in s_gpsLeapSeconds) {
+        public static int GetLeapSeconds(DateTime dateTimeUTC)
+        {
+            foreach (KeyValuePair<DateTime, int> de in s_gpsLeapSeconds)
+            {
                 if (s_ReverseDateTimeComparable.Compare(dateTimeUTC, de.Key) <= 0)
                     return (int)de.Value;
             }
@@ -519,13 +556,16 @@ namespace NavSat.Core.Utils {
         }
 
         private static ReverseDateTimeComparable s_ReverseDateTimeComparable = null;
-        private class ReverseDateTimeComparable : IComparer<DateTime> {
-            public ReverseDateTimeComparable() {
+        private class ReverseDateTimeComparable : IComparer<DateTime>
+        {
+            public ReverseDateTimeComparable()
+            {
             }
 
             #region IComparer<DateTime> Members
 
-            public int Compare(DateTime x, DateTime y) {
+            public int Compare(DateTime x, DateTime y)
+            {
                 return DateTime.Compare(x, y) * -1;
             }
 

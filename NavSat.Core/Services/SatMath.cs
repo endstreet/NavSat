@@ -3,13 +3,16 @@ using NavSat.Core.Abstrations.Services;
 using NavSat.Core.Utils;
 using System;
 
-namespace NavSat.Core.Services {
-    public class SatMath : ISatMath {
+namespace NavSat.Core.Services
+{
+    public class SatMath : ISatMath
+    {
 
         private static readonly double rotrat = 7.293715E-05;
         private static double gm = 3.986005E+14;
 
-        public EcefCoordinate CalculateEcef(DateTimeOffset dateTimeOffset, SatelliteOrbit orbit) {
+        public EcefCoordinate CalculateEcef(DateTimeOffset dateTimeOffset, SatelliteOrbit orbit)
+        {
 
             var time = new GPSTime(dateTimeOffset.UtcDateTime);
 
@@ -18,7 +21,8 @@ namespace NavSat.Core.Services {
             double cosi, scom, ccom, xpl, ypl, com, m0, dt, ec, radius;
 
 
-            if (orbit.RootOfSemiMajorAxis <= 0.0 || orbit.SatId < 0) {
+            if (orbit.RootOfSemiMajorAxis <= 0.0 || orbit.SatId < 0)
+            {
                 return null;
             }
 
@@ -49,14 +53,16 @@ namespace NavSat.Core.Services {
             cosi = Math.Cos(orbit.DeltaInclination);
 
             //  earth centered fixed coordinates
-            return new EcefCoordinate() {
+            return new EcefCoordinate()
+            {
                 X = xpl * ccom - ypl * cosi * scom,
                 Y = xpl * scom + ypl * cosi * ccom,
                 Z = ypl * Math.Sin(orbit.DeltaInclination)
             };
         }
 
-        public virtual double EccAnom(double ec, double m) {
+        public virtual double EccAnom(double ec, double m)
+        {
             // arguments:
             // ec=eccentricity, m=mean anomaly,
 
@@ -72,7 +78,8 @@ namespace NavSat.Core.Services {
             double E = M;
             double F = E - ec * Math.Sin(m) - m;
 
-            while (Math.Abs(F) > delta && i < maxIter) {
+            while (Math.Abs(F) > delta && i < maxIter)
+            {
                 E = E - F / (1.0 - ec * Math.Cos(E));
                 F = E - ec * Math.Sin(E) - m;
                 i = i + 1;

@@ -1,5 +1,7 @@
-﻿namespace NavSat.Core.ApiClients.Dtos {
-    public class SatAlmanac {
+﻿namespace NavSat.Core.ApiClients.Dtos
+{
+    public class SatAlmanac
+    {
 
         /*
             <SatAlmanac>

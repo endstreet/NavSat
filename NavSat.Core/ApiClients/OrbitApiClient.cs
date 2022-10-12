@@ -7,24 +7,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace NavSat.Core.ApiClients {
-    public class OrbitApiClient : IOrbitApiClient {
+namespace NavSat.Core.ApiClients
+{
+    public class OrbitApiClient : IOrbitApiClient
+    {
         private readonly IOrbitApiClientConfig _config;
         private readonly IMapper _mapper;
 
-        public OrbitApiClient(IOrbitApiClientConfig config, IMapper mapper) {
+        public OrbitApiClient(IOrbitApiClientConfig config, IMapper mapper)
+        {
             this._config = config;
             this._mapper = mapper;
         }
 
-        public async Task<IEnumerable<SatelliteOrbit>> GetOrbitsAsAtAsync(DateTimeOffset dateTimeOffset) {
+        public async Task<IEnumerable<SatelliteOrbit>> GetOrbitsAsAtAsync(DateTimeOffset dateTimeOffset)
+        {
 
             var utc = dateTimeOffset.UtcDateTime;
 
-            using (var httpClient = new HttpClient()) {
+            using (var httpClient = new HttpClient())
+            {
 
                 var uri = $"{_config.BaseUrl}/{utc.Year}/{utc.Month}/{utc.Day}";
 

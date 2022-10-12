@@ -3,8 +3,10 @@ using NavSat.Core.Abstrations.Utils;
 using System;
 using System.Collections.Generic;
 
-namespace NavSat.Core.Abstrations.Services {
-    public interface IAlmanacService {
+namespace NavSat.Core.Abstrations.Services
+{
+    public interface IAlmanacService
+    {
         DateTime AlmanacTimeUTC { get; }
         IEnumerable<SatelliteOrbit> FullAlmanac { get; }
 

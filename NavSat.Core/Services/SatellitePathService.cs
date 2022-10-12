@@ -6,30 +6,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NavSat.Core.Services {
-    public class SatellitePathService : ISatellitePathService {
+namespace NavSat.Core.Services
+{
+    public class SatellitePathService : ISatellitePathService
+    {
         private readonly IGeoMath _geoMath;
         private readonly IOrbitApiClient _orbitApiClient;
         private readonly ISatMath _satMath;
         private readonly ISatelliteService _satService;
 
-        public SatellitePathService(IGeoMath geoMath, ISatMath satMath, IOrbitApiClient orbitApiClient, ISatelliteService satService) {
+        public SatellitePathService(IGeoMath geoMath, ISatMath satMath, IOrbitApiClient orbitApiClient, ISatelliteService satService)
+        {
             this._geoMath = geoMath;
             this._satMath = satMath;
             this._orbitApiClient = orbitApiClient;
             this._satService = satService;
         }
 
-        public async Task<IEnumerable<SatellitePath>> GetPathsAsAtAsync(DateTimeOffset at) {
+        public async Task<IEnumerable<SatellitePath>> GetPathsAsAtAsync(DateTimeOffset at)
+        {
 
             var result = new List<SatellitePath>();
 
             var orbits = await _orbitApiClient.GetOrbitsAsAtAsync(at);
 
-            foreach (var orbit in orbits) {
+            foreach (var orbit in orbits)
+            {
 
                 var sat = _satService.CreateFrom(orbit.SatId);
-                if (sat != null) {
+                if (sat != null)
+                {
 
                     var ecef = _satMath.CalculateEcef(at, orbit);
 
@@ -49,12 +55,14 @@ namespace NavSat.Core.Services {
 
         }
 
-        public async Task<IEnumerable<SatellitePath>> GetAsSeenFromAsAtAsync(GeoCoordinate from, DateTimeOffset at) {
+        public async Task<IEnumerable<SatellitePath>> GetAsSeenFromAsAtAsync(GeoCoordinate from, DateTimeOffset at)
+        {
             var orbits = await _orbitApiClient.GetOrbitsAsAtAsync(at);
             return FilterAsSeenFromDuring(from, new DateTimeOffset[] { at }, orbits);
         }
 
-        public async Task<IEnumerable<SatellitePath>> GetAsSeenFromDuringAsync(GeoCoordinate from, IEnumerable<DateTimeOffset> times) {
+        public async Task<IEnumerable<SatellitePath>> GetAsSeenFromDuringAsync(GeoCoordinate from, IEnumerable<DateTimeOffset> times)
+        {
 
             var at = times.Min();
             var orbits = await _orbitApiClient.GetOrbitsAsAtAsync(at);
@@ -62,18 +70,22 @@ namespace NavSat.Core.Services {
 
         }
 
-        protected internal virtual IEnumerable<SatellitePath> FilterAsSeenFromDuring(GeoCoordinate from, IEnumerable<DateTimeOffset> times, IEnumerable<SatelliteOrbit> orbits) {
+        protected internal virtual IEnumerable<SatellitePath> FilterAsSeenFromDuring(GeoCoordinate from, IEnumerable<DateTimeOffset> times, IEnumerable<SatelliteOrbit> orbits)
+        {
 
             var result = new List<SatellitePath>();
 
-            foreach (var orbit in orbits) {
+            foreach (var orbit in orbits)
+            {
 
                 var sat = _satService.CreateFrom(orbit.SatId);
-                if (sat != null) {
+                if (sat != null)
+                {
 
                     var positions = new List<SatelliteLocation>();
 
-                    foreach (var time in times.OrderBy(t => t.Ticks)) {
+                    foreach (var time in times.OrderBy(t => t.Ticks))
+                    {
 
                         var ecef = _satMath.CalculateEcef(time, orbit);
 
@@ -94,14 +106,16 @@ namespace NavSat.Core.Services {
 
                         //TODO: Cutoff?
 
-                        if (subjectivePos.SkyCoordinate.Elevation >= 10) {
+                        if (subjectivePos.SkyCoordinate.Elevation >= 10)
+                        {
                             //result.Add(new SatellitePath(sat, orbit, subjectivePos));
                             positions.Add(subjectivePos);
                         }
 
                     }
 
-                    if (positions.Any()) {
+                    if (positions.Any())
+                    {
                         result.Add(new SatellitePath(sat, orbit, positions));
                     }
 

@@ -2,8 +2,10 @@
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.ApiClients.Dtos;
 
-namespace NavSat.Core.ApiClients.Profiles {
-    public class SatOrbitProfile : Profile {
+namespace NavSat.Core.ApiClients.Profiles
+{
+    public class SatOrbitProfile : Profile
+    {
 
         private readonly double rhoalt = 57.295779513082;
 

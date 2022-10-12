@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace NavSat.Core.Abstrations.Models {
-    public class Constellation : IComparable {
+namespace NavSat.Core.Abstrations.Models
+{
+    public class Constellation : IComparable
+    {
 
         private readonly string _system;
         private readonly int _rank;
@@ -11,7 +13,8 @@ namespace NavSat.Core.Abstrations.Models {
 
         public Constellation() { }
 
-        public Constellation(string system, int rank, char prefix, int minSatId, int maxSatId) {
+        public Constellation(string system, int rank, char prefix, int minSatId, int maxSatId)
+        {
             this._system = system;
             this._rank = rank;
             this._prefix = prefix;
@@ -29,18 +32,21 @@ namespace NavSat.Core.Abstrations.Models {
 
         #region Overrides
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             Constellation rhs = obj as Constellation;
             if (rhs == null)
                 return false;
             return _system.Equals(rhs._system);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return _system.GetHashCode();
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return _system;
         }
 
@@ -48,7 +54,8 @@ namespace NavSat.Core.Abstrations.Models {
 
         #region IComparable Members
 
-        public int CompareTo(object obj) {
+        public int CompareTo(object obj)
+        {
             Constellation rhs = obj as Constellation;
             if (rhs == null)
                 throw new InvalidOperationException();

@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
@@ -12,10 +11,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NavSat.Core.Tests {
+namespace NavSat.Core.Tests
+{
 
     [TestClass]
-    public class IntegrationTests 
+    public class IntegrationTests
     {
         private OrbitApiClient _orbitApiClient;
         private SatellitePathService _satellitePathService;
@@ -23,7 +23,7 @@ namespace NavSat.Core.Tests {
         public IntegrationTests()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IOrbitApiClientConfig, TestConfig>(x => 
+            services.AddSingleton<IOrbitApiClientConfig, TestConfig>(x =>
             new TestConfig());
             //services.AddScoped<ISatOrbitMapper, SatOrbitMapper>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -32,7 +32,7 @@ namespace NavSat.Core.Tests {
             services.AddScoped<IConstellationService, ConstellationService>();
             services.AddScoped<IGeoMath, GeoMath>();
             services.AddScoped<ISatMath, SatMath>();
-            services.AddScoped<ISatelliteService, SatelliteService>(x => 
+            services.AddScoped<ISatelliteService, SatelliteService>(x =>
             new SatelliteService(x.GetRequiredService<IConstellationService>()));
 
             services.AddScoped<ISatellitePathService, SatellitePathService>(x =>
@@ -43,10 +43,11 @@ namespace NavSat.Core.Tests {
             _orbitApiClient = (OrbitApiClient)serviceProvider.GetService<IOrbitApiClient>();
             _satellitePathService = (SatellitePathService)serviceProvider.GetService<ISatellitePathService>();
         }
- 
 
-         [TestMethod]
-        public async Task OrbitApiClient_SmokeTest() {
+
+        [TestMethod]
+        public async Task OrbitApiClient_SmokeTest()
+        {
 
             // Arrange
             //var client = CreateOrbitApiClient();
@@ -61,14 +62,16 @@ namespace NavSat.Core.Tests {
 
 
         [TestMethod]
-        public async Task SatellitePathService_SmokeTest() {
+        public async Task SatellitePathService_SmokeTest()
+        {
 
             // Arrange
 
             //var service = CreateSatellitePathService();
 
-            
-            var capeTown = new GeoCoordinate() {
+
+            var capeTown = new GeoCoordinate()
+            {
                 Latitude = -33.9249,
                 Longitude = 18.4241,
                 Altitude = 100

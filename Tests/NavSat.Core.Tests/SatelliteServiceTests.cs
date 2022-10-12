@@ -1,11 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.Services;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace NavSat.Core.Tests
 {
@@ -14,34 +11,45 @@ namespace NavSat.Core.Tests
     {
 
         [TestMethod]
-        public void SatelliteService_MockDependencyValidTest()
+        public void SatelliteService_MockDependencyTest()
         {
             // ARRANGE
             //Use Mocked ConstellationService to prevent testing of this dependency
-            var mockConstellationService = Mock.Of<IConstellationService>();
-            var exclSatellite = new SatelliteService(mockConstellationService);
+            var mock = new Mock<IConstellationService>();
+            //Return new Constellation for valid Sattelite Id
+            mock.Setup(p => p.For(1)).Returns(new Constellation());
+            //Return null for invalid Sattelite Id
+            mock.Setup(p => p.For(0)).Returns((Constellation)null);
+            var exclSatellite = new SatelliteService(mock.Object);
 
             // ACT
-            exclSatellite.CreateFrom(1);//Satellite id 1 is valid
+            var validResult = exclSatellite.CreateFrom(1);//Satellite id 1 is valid
+            var inValidResult = exclSatellite.CreateFrom(0);//SateliteId 0 is invalid
 
             // ASSERT
-            Mock.Get(mockConstellationService).Verify(p => p.For(1), Times.Once());
+            Mock.Get(mock.Object).Verify(p => p.For(1), Times.Once());//Superfluos...
+            Mock.Get(mock.Object).Verify(p => p.For(0), Times.Once());//Superfluos...
 
+            Assert.IsNotNull(validResult);
+            Assert.IsNull(inValidResult);
         }
 
-        [TestMethod]
-        public void SatelliteService_MockDependencyInvalidTest()
-        {
-            // ARRANGE
-            //Use Mocked ConstellationService to prevent testing of this dependency
-            var mockConstellationService = Mock.Of<IConstellationService>();
-            var exclSatellite = new SatelliteService(mockConstellationService);
+        //[TestMethod]
+        //public void SatelliteService_MockDependencyInvalidTest()
+        //{
+        //    // ARRANGE
+        //    //Use Mocked ConstellationService to prevent testing of this dependency
+        //    var mock = new Mock<IConstellationService>();
+        //    //Return null for invalid Sattelite Id
+        //    mock.Setup(p => p.For(0)).Returns((Constellation)null);
+        //    var exclSatellite = new SatelliteService(mock.Object);
 
-            // ACT
-            exclSatellite.CreateFrom(0);//SateliteId 0 is invalid
+        //    // ACT
+        //    var result = exclSatellite.CreateFrom(0);//SateliteId 0 is invalid
 
-            // ASSERT
-            Mock.Get(mockConstellationService).Verify(p => p.For(0), Times.Once());
-        }
+        //    // ASSERT
+        //    Mock.Get(mock.Object).Verify(p => p.For(0), Times.Once());//Superfluos...
+        //    Assert.IsNull(result);
+        //}
     }
 }

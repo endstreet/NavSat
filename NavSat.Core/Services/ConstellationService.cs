@@ -2,8 +2,10 @@
 using NavSat.Core.Abstrations.Services;
 using System.Collections.Generic;
 
-namespace NavSat.Core.Services {
-    public class ConstellationService : IConstellationService {
+namespace NavSat.Core.Services
+{
+    public class ConstellationService : IConstellationService
+    {
 
         private readonly Constellation _gps = new Constellation("GPS", 0, 'G', 1, 37);
         private readonly Constellation _glonass = new Constellation("Glonass", 1, 'R', 38, 68);
@@ -11,7 +13,8 @@ namespace NavSat.Core.Services {
         private readonly Constellation _compass = new Constellation("Compass", 3, 'C', 264, 293); //BeiDou
         private readonly Constellation _qzss = new Constellation("QZSS", 4, 'J', 111, 118);
 
-        public IEnumerable<Constellation> All() {
+        public IEnumerable<Constellation> All()
+        {
             var list = new List<Constellation> {
                 Compass(),
                 Galileo(),
@@ -25,27 +28,33 @@ namespace NavSat.Core.Services {
             return list;
         }
 
-        public Constellation Compass() {
+        public Constellation Compass()
+        {
             return _compass;
         }
 
-        public Constellation Galileo() {
+        public Constellation Galileo()
+        {
             return _galileo;
         }
 
-        public Constellation Glonass() {
+        public Constellation Glonass()
+        {
             return _glonass;
         }
 
-        public Constellation GPS() {
+        public Constellation GPS()
+        {
             return _gps;
         }
 
-        public Constellation QZSS() {
+        public Constellation QZSS()
+        {
             return _qzss;
         }
 
-        public Constellation For(int satelliteId) {
+        public Constellation For(int satelliteId)
+        {
 
             if (satelliteId >= _gps.MinSatID && satelliteId <= _gps.MaxSatID)
                 return _gps;

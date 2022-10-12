@@ -1,5 +1,7 @@
-﻿namespace NavSat.Core.Abstrations.Services {
-    public interface IGeoMath {
+﻿namespace NavSat.Core.Abstrations.Services
+{
+    public interface IGeoMath
+    {
         double Deg2Rad(double deg);
         double Rad2Deg(double rad);
 

@@ -1,5 +1,7 @@
-﻿namespace NavSat.Core.Abstrations.Models {
-    public class SatelliteOrbit {
+﻿namespace NavSat.Core.Abstrations.Models
+{
+    public class SatelliteOrbit
+    {
 
         public int SatId { get; set; }
 
@@ -28,8 +30,10 @@
         public int GpsWeek { get; set; }
 
 
-        public bool IsHealthy {
-            get {
+        public bool IsHealthy
+        {
+            get
+            {
                 return HealthCode == 0;
             }
         }

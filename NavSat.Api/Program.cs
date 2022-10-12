@@ -1,10 +1,8 @@
+using AutoMapper;
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.ApiClients;
 using NavSat.Core.Services;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Configuration;
-using AutoMapper;
 
 namespace NavSat.Api
 {
@@ -56,7 +54,7 @@ namespace NavSat.Api
     {
 
         public string BaseUrl { get; }
-        
+
         public OrbitApiClientConfig(string baseurl)
         {
             BaseUrl = baseurl;
