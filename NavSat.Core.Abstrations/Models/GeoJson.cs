@@ -1,15 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NavSat.Core.Abstrations.Models
 {
     public class Properties
     {
+        public string Name { get; set; }
+        public string Prn { get; set; }
+        public string Constellation { get; set; }
     }
 
     public class Geometry
     {
         public string type { get; set; } //Point or LineString
-        public List<List<List<double>>> coordinates { get; set; }
+        public List<List<double>> coordinates { get; set; }
+
     }
 
     public class Feature
