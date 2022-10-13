@@ -20,11 +20,7 @@ namespace NavSat.Core.ApiClients.Profiles
             {
                 new Feature(){
                     type = "Feature",
-                    geometry = new Geometry
-                    {
-                        type = src.Path.Count() == 1 ? "Point":"LineString",
-                        coordinates = src.Path.Select(x =>  new List<double>{ x.Trace.Longitude, x.Trace.Latitude }).ToList()
-                    },
+                    geometry = (src.Path.Count() == 1) ? new Geometry {type = "Point",coordinates = src.Path.Select(x =>  new List<double>{ x.Trace.Longitude, x.Trace.Latitude }).First() } : new Geometry { type = "LineString",coordinates = src.Path.Select(x =>  new List<double>{ x.Trace.Longitude, x.Trace.Latitude }).ToList() },
                     properties = new Properties
                     {
                         Name = src.DisplayName,

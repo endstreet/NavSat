@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace NavSat.Core.Abstrations.Models
 {
+    public class Geometry
+    {
+        public string type { get; set; }
+        public object coordinates { get; set; }
+    }
     public class Properties
     {
         public string Name { get; set; }
@@ -10,12 +15,18 @@ namespace NavSat.Core.Abstrations.Models
         public string Constellation { get; set; }
     }
 
-    public class Geometry
-    {
-        public string type { get; set; } //Point or LineString
-        public List<List<double>> coordinates { get; set; }
+    //public class LineGeometry: IGeometry<List<List<double>>>
+    //{
+    //    public string type { get => "LineString"; }
 
-    }
+    //    public List<List<double>> coordinates { get; set; }
+        
+    //}
+    //public class PointGeometry : IGeometry<List<double>>
+    //{
+    //    public string type { get => "Point"; }
+    //    public List<double> coordinates { get; set; }
+    //}
 
     public class Feature
     {
