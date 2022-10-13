@@ -6,8 +6,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace NavSat.Core.ApiClients
 {
@@ -34,31 +36,15 @@ namespace NavSat.Core.ApiClients
 
                 string json = "";
                 // TODO: Add Error Handling
-                try
-                {
-                    json = await httpClient.GetStringAsync(uri);
-                }
-                catch (HttpRequestException)
-                {
-                    throw;
-                }
-                catch
-                {
-                    //Lets ignore other errors now for brevity.
-                }
-
-                //var json = await httpClient.GetStringAsync(uri);
-
+                var res = await httpClient.GetAsync(uri);
+                res.EnsureSuccessStatusCode();
+                json = await res.Content.ReadAsStringAsync();
 
                 var far = JsonConvert.DeserializeObject<FullAlmanacResponse>(json);
                 //Todo: test
                 return far.Satellites.Select(s => _mapper.Map<SatelliteOrbit>(s)).ToList();
 
             }
-
-
-
         }
-
     }
 }
