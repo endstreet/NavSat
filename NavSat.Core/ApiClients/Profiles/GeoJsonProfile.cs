@@ -15,7 +15,7 @@ namespace NavSat.Core.ApiClients.Profiles
         public GeoJsonLineProfile()
         {
             CreateMap<SatellitePath, FeatureCollection>()
-            .ForMember(dest => dest.type, opt => opt.MapFrom(src => "FeatureCollectiion"))
+            .ForMember(dest => dest.type, opt => opt.MapFrom(src => "FeatureCollection"))
             .ForMember(dest => dest.features, opt => opt.MapFrom(src => new List<Feature>()
             {
                 new Feature(){
