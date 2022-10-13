@@ -30,14 +30,14 @@ namespace NavSat.Core.Abstrations.Models
 
     public class Feature
     {
-        public string type { get; set; }
+        public string type { get => "Feature"; }
         public Properties properties { get; set; }
         public Geometry geometry { get; set; }
     }
 
     public class FeatureCollection
     {
-        public string type { get; set; }
+        public string type { get => "FeatureCollection"; } 
         public List<Feature> features { get; set; }
     }
 
