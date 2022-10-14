@@ -1,0 +1,33 @@
+<mat-toolbar color="secondary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidebarmenu.toggle()">menu</mat-icon>
+    </button>
+    <h2>NavSat</h2>
+    <a mat-button routerLink="login" routerLinkActive="active" class="title-center" *ngIf="email"> Logout - {{email}}</a>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidebarmenu>
+      <ul id="navigation">
+        <ng-template #menuItemTemplate let-menu>
+          <li *ngFor="let item of menu" class="">
+            <a mat-button routerLink="{{item.route}}" routerLinkActive="active">{{item.name}}</a>
+            <ng-container *ngIf="item.submenu">
+              <ul class="">
+                <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: item.submenu }">
+                </ng-container>
+              </ul>
+            </ng-container>
+          </li>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: menu }"></ng-container>
+      </ul>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 92vh">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

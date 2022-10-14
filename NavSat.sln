@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C455A8D0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavSat.Core.Tests", "Tests\NavSat.Core.Tests\NavSat.Core.Tests.csproj", "{0DEA6DDB-DC4D-407A-ADBF-5CB69267726E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavSat.Api", "NavSat.Api\NavSat.Api.csproj", "{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavSat.Api", "NavSat.Api\NavSat.Api.csproj", "{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "NavSat.UI", "NavSat.UI\NavSat.UI.esproj", "{013DB02C-35E6-4F01-9815-507BCBB96B81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,12 @@ Global
 		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6118764-D0D7-4ED6-8014-D9751B0BC6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013DB02C-35E6-4F01-9815-507BCBB96B81}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

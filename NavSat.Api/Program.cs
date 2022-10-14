@@ -10,6 +10,7 @@ namespace NavSat.Api
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -31,6 +32,15 @@ namespace NavSat.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("*");
+                                  });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -38,11 +48,14 @@ namespace NavSat.Api
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors(MyAllowSpecificOrigins);
+            }
+            else
+            {
+                app.UseHttpsRedirection();
+                app.UseAuthorization();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
 
 
             app.MapControllers();

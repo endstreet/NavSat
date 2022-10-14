@@ -35,13 +35,15 @@ namespace NavSat.Core.ApiClients
                 var uri = $"{_config.BaseUrl}/{utc.Year}/{utc.Month}/{utc.Day}";
 
                 string json = "";
-                // TODO: Add Error Handling
+                
                 var res = await httpClient.GetAsync(uri);
+                // I suspect the requirement hinted at a middleware request filter.
+                // The EnsureSuccessStatusCode will throw the relevant exception anyways
                 res.EnsureSuccessStatusCode();
                 json = await res.Content.ReadAsStringAsync();
 
                 var far = JsonConvert.DeserializeObject<FullAlmanacResponse>(json);
-                //Todo: test
+                //New Automapper map
                 return far.Satellites.Select(s => _mapper.Map<SatelliteOrbit>(s)).ToList();
 
             }

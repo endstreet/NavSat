@@ -1,0 +1,24 @@
+<h1 id="tableLabel">GeoLocation</h1>
+
+<p>GeoLocation from API</p>
+
+<p *ngIf="!featurecollections"><em>Loading...</em></p>
+
+<table *ngIf="featurecollections">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let featurecollection of featurecollections">
+      <td>{{featurecollection.type}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
