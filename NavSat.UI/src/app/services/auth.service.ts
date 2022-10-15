@@ -24,6 +24,7 @@ export class AuthService {
 
   Logout() {
     localStorage.clear();
+    this.UpdateMenu.next();
   }
 
   isLoggedIn() {

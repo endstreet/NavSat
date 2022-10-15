@@ -14,11 +14,11 @@ import { SpystuffComponent } from './components/spystuff/spystuff.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Angular material */
-import { AngularMaterialModule } from './angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthGuard } from './services/auth-guard.service';
+import { ModalComponent } from './modal/modal.component';
 
 
 @NgModule({
@@ -27,20 +27,22 @@ import { AuthGuard } from './services/auth-guard.service';
     LogInComponent,
     SatelliteComponent,
     MapComponent,
-    SpystuffComponent
+    SpystuffComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    NgbModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AngularMaterialModule,
     ReactiveFormsModule,
     FormsModule,
     FlexLayoutModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+/*  schemas: [CUSTOM_ELEMENTS_SCHEMA],*/
+
 })
 export class AppModule { }

@@ -13,8 +13,10 @@ export class LogInComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) { }
+
   email = ""
   password = ""
+
   ngOnInit(): void {
     this.authService.Logout();
     this.authService.UpdateMenu.next();

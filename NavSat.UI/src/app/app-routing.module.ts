@@ -9,9 +9,10 @@ import { SpystuffComponent } from './components/spystuff/spystuff.component';
 const routes: Routes = [
 /*  { path: '', pathMatch: 'full', redirectTo: 'login' },*/
   { path: 'login', component: LogInComponent },
-  { path: 'satellites', component: SatelliteComponent, canActivate: [AuthGuard]  },
+  { path: 'satellites', component: SatelliteComponent, canActivate: [AuthGuard] },
+  { path: 'satellites/filter/:filter', component: SatelliteComponent, canActivate: [AuthGuard] },
   { path: 'map', component: MapComponent, canActivate: [AuthGuard]  },
-  { path: 'spystuff', component: SpystuffComponent, canActivate: [AuthGuard]  },
+  { path: 'spystuff', component: SpystuffComponent, canActivate: [AuthGuard] },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
