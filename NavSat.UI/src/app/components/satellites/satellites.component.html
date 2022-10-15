@@ -3,22 +3,33 @@
 <p>GeoLocation from API</p>
 
 <p *ngIf="!featurecollections"><em>Loading...</em></p>
+<ng-container *ngIf="featurecollections">
 
-<table *ngIf="featurecollections">
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let featurecollection of featurecollections">
-      <td>{{featurecollection.type}}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+    <table *ngIf="featurecollections">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Constelation</th>
+          <th>Health</th>
+          <th>Latitude</th>
+          <th>Longtitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let collection of featurecollections">
+        <tr *ngFor="let feature of collection.features">
+          <td>{{feature.properties.Name}}</td>
+          <td>{{feature.properties.Constellation}}</td>
+          <td>
+            <svg viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="1" cy="1" r="0.6" [ngStyle]="{'fill': (feature.properties.IsHealthy ? 'green' : 'red') }" />
+            </svg>
+
+          </td>
+          <td>Latitude</td>
+          <td>Longtitude</td>
+        </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container>

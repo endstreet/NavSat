@@ -27,7 +27,7 @@ export class SatelliteComponent {
 }
 interface Properties {
   Name: string;
-  Prn: string;
+  IsHealthy: boolean;
   Constellation: string;
 }
 
