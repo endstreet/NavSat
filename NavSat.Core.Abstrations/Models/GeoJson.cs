@@ -11,7 +11,7 @@ namespace NavSat.Core.Abstrations.Models
     public class Properties
     {
         public string Name { get; set; }
-        public string Prn { get; set; }
+        public bool IsHealthy { get; set; }
         public string Constellation { get; set; }
     }
 

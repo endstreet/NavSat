@@ -22,7 +22,7 @@ namespace NavSat.Core.ApiClients.Profiles
                     properties = new Properties
                     {
                         Name = src.DisplayName,
-                        Prn = src.Prn.ToString(),
+                        IsHealthy = src.Orbit.IsHealthy,
                         Constellation = src.Constellation
                     }
                 }
