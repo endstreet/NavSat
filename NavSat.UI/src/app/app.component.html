@@ -1,21 +1,16 @@
-<mat-toolbar color="secondary">
-  <mat-toolbar-row>
-    <button mat-icon-button>
-      <mat-icon (click)="sidebarmenu.toggle()">menu</mat-icon>
+<nav class="navbar navbar-expand-sm bg-dark">
+  <div class="container-fluid white">
+    <a class="navbar-brand white" href="#"><h2>NavSat</h2></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <h2>NavSat</h2>
-    <a mat-button routerLink="login" routerLinkActive="active" class="title-center" *ngIf="email"> Logout - {{email}}</a>
-  </mat-toolbar-row>
-</mat-toolbar>
-
-<mat-sidenav-container>
-  <mat-sidenav #sidebarmenu>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul id="navigation">
         <ng-template #menuItemTemplate let-menu>
-          <li *ngFor="let item of menu" class="">
-            <a mat-button routerLink="{{item.route}}" routerLinkActive="active">{{item.name}}</a>
+          <li *ngFor="let item of menu" class="nav-item white">
+            <a class="nav-link white" routerLink="{{item.route}}" routerLinkActive="active">{{item.name}}</a>
             <ng-container *ngIf="item.submenu">
-              <ul class="">
+              <ul class="nav-item dropdown">
                 <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: item.submenu }">
                 </ng-container>
               </ul>
@@ -24,10 +19,8 @@
         </ng-template>
         <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: menu }"></ng-container>
       </ul>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <div style="height: 92vh">
-      <router-outlet></router-outlet>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+

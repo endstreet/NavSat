@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "./services/auth.service";
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,11 +27,12 @@ export class AppComponent implements OnInit {
 
       if (this.authService.isLoggedIn()) {
         this.email = localStorage.getItem("email")!;
-        this.menu = [{ name: 'Satellite', route: 'satellites', submenu: [{ name: 'All Satellites', route: 'satellites' }, { name: 'Visible Satellites', route: 'satellites/1' }] }];
+        this.menu = [{ name: 'Satellite', route: 'satellites', submenu: [{ name: 'All Satellites', route: 'satellites' }, { name: 'Visible Satellites', route: 'satellites/filter/1' }] }];
         this.menu.push({ name: 'Map', route: 'map' })
         if (this.authService.isSpy()) {
           this.menu.push({ name: 'Spy Stuff', route: 'spystuff' })
         }
+        this.menu.push({ name: 'Logout - ' + this.email , route: 'login' });
       }
       else {
         this.menu = [{ name: 'Login', route: 'login' }];
@@ -38,6 +40,7 @@ export class AppComponent implements OnInit {
   }
 
   title = 'NavSat.UI';
+
 }
 
 interface MenuItem {
