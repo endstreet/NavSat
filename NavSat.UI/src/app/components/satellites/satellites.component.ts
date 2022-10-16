@@ -7,6 +7,7 @@ import { Feature, FeatureCollection } from '../../services/satellitedata';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, GridReadyEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
+import { HealthCellRenderer } from './components/healthindicator.component';
 
 @Component({
   selector: 'app-satellites',
@@ -19,13 +20,11 @@ export class SatelliteComponent {
   public selectedfeature: Feature | undefined;
 
   public visible: any;
-//{ field: 'athlete' },
-//// Using dot notation to access nested property
-//{ field: 'medals.gold', headerName: 'Gold' },
+
   columnDefs: ColDef[] = [
     { field: 'features.0.properties.Name',headerName: 'Name' },
     { field: 'features.0.properties.Constellation', headerName: 'Constellation' },
-    { field: 'features.0.properties.IsHealthy', headerName: 'Health' },
+    { field: 'features.0.properties.IsHealthy', headerName: 'Health', cellRenderer: HealthCellRenderer },
     { field: 'features.0.geometry.coordinates.0', headerName: 'Latitude' },
     { field: 'features.0.geometry.coordinates.1', headerName: 'Longtitude' }
   ];
@@ -44,7 +43,7 @@ export class SatelliteComponent {
   constructor(private http: HttpClient, private route: ActivatedRoute,
     private router: Router, private modalService: NgbModal) {
   }
-  // Example load data from sever
+  //load data from sever
   onGridReady(params: GridReadyEvent) {
     this.visible = this.route.snapshot.paramMap.get('filter')!;
     if (this.visible) {
@@ -59,7 +58,6 @@ export class SatelliteComponent {
     }
     else {
       this.rowData$ = this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geolocations');//.forEach(element => this.satellites.push(element));;
-      //console.info(typeof(this.rowData$.toPromise()));
     }
   }
 
@@ -73,29 +71,7 @@ export class SatelliteComponent {
     this.agGrid.api.deselectAll();
   }
 
-  public ngOnInit(): void {
-    //this.visible = this.route.snapshot.paramMap.get('filter')!;
-    //if (this.visible) {
-    //  if (navigator.geolocation) {
-    //    navigator.geolocation.getCurrentPosition((location) => {
-    //      console.info(location);
-    //      this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisible/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString())).subscribe(result => {
-    //        this.rowData$ = result;
-    //      }, error => console.error(error));
-    //    });
-    //  } else {
-    //    this.router.navigate(['satellites']);
-    //  }
-
-    //}
-    //else {
-    //  this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geolocations').subscribe(result => {
-    //    this.satellites = result;
-    //  }, error => console.error(error));
-    //}
-  }
-
-
+ 
   openModal(satellite: Feature) {
     const modalRef = this.modalService.open(ModalComponent,
       {

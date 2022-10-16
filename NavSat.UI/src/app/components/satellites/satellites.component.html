@@ -1,7 +1,7 @@
 <!-- Button to clear selection -->
 <button class="btn btn-secondary" (click)="clearSelection()">Clear Selection</button>
 <!-- AG Grid Angular Component -->
-<ag-grid-angular style="width: 100%; height: 100%"
+<ag-grid-angular style="width: 100%; height: 70%"
                  class="ag-theme-alpine"
                  [columnDefs]="columnDefs"
                  [defaultColDef]="defaultColDef"
@@ -9,4 +9,6 @@
                  [rowSelection]="'multiple'"
                  [animateRows]="true"
                  (gridReady)="onGridReady($event)"
+                 [pagination]="true"
+                 [paginationPageSize] ="10"
                  (cellClicked)="onCellClicked($event)"></ag-grid-angular>
