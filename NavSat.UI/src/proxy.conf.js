@@ -4,7 +4,7 @@ const PROXY_CONFIG = [
     context: [
       "/FeatureCollection",
     ],
-    target: "http://localhost:5091/api/satellitepath/geolocations",
+    target: "https://localhost:5094",
     secure: false
   }
 ]

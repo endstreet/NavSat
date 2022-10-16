@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
@@ -59,7 +60,7 @@ namespace NavSat.Api.Controllers
 
 
         //GeoJson Calls ----------------------------------------------------------------------------------------------------------
-
+        //[EnableCors("CorsPolicy")]
         // Date Format 2022-07-29T21:58:39
         [HttpGet("GeoLocations/{forDate?}")]
         public async Task<string> GetSateliteLocationsGj(DateTime? forDate = null)
