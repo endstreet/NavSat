@@ -2,6 +2,9 @@
     <div class="card-body">
       <div>
         <h2>Log in</h2>
+        <svg viewBox="0 0 2 2" xmlns="http://www.w3.org/2000/svg" style="max-height:20px;">
+          <circle cx="1" cy="1" r="0.5"  [ngStyle]="{'fill': (true ? 'green' : 'red') }" />
+        </svg>
       </div>
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="form-group">

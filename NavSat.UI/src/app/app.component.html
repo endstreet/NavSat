@@ -1,26 +1,26 @@
-<nav class="navbar navbar-expand-sm bg-dark">
-  <div class="container-fluid white">
-    <a class="navbar-brand white" href="#"><h2>NavSat</h2></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul id="navigation">
-        <ng-template #menuItemTemplate let-menu>
-          <li *ngFor="let item of menu" class="nav-item white">
-            <a class="nav-link white" routerLink="{{item.route}}" routerLinkActive="active">{{item.name}}</a>
-            <ng-container *ngIf="item.submenu">
-              <ul class="nav-item dropdown">
-                <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: item.submenu }">
-                </ng-container>
-              </ul>
-            </ng-container>
-          </li>
-        </ng-template>
-        <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: menu }"></ng-container>
-      </ul>
-    </div>
-  </div>
-</nav>
-<router-outlet></router-outlet>
 
+    <nav class="navbar navbar-expand-sm bg-dark">
+      <div class="container-fluid white">
+        <a class="navbar-brand white" href="#"><h2>NavSat</h2></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul id="navigation">
+            <ng-template #menuItemTemplate let-menu>
+              <li *ngFor="let item of menu" class="nav-item white">
+                <a class="nav-link white" routerLink="{{item.route}}" routerLinkActive="active">{{item.name}}</a>
+                <ng-container *ngIf="item.submenu">
+                  <ul class="nav-item dropdown">
+                    <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: item.submenu }">
+                    </ng-container>
+                  </ul>
+                </ng-container>
+              </li>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="menuItemTemplate; context: { $implicit: menu }"></ng-container>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <router-outlet></router-outlet>
