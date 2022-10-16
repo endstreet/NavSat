@@ -17,12 +17,10 @@ export class SatelliteComponent {
   public featurecollections?: FeatureCollection[];
   public selectedfeature: Feature | undefined;
 
-  visible: any;
+  public visible: any;
 
   closeResult: string = '';
-  lng!: string;
-  lat!: string;
-  alt!: string | undefined;
+
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
     private router: Router, private modalService: NgbModal) {
@@ -33,10 +31,17 @@ export class SatelliteComponent {
   public ngOnInit(): void {
     this.visible = this.route.snapshot.paramMap.get('filter')!;
     if (this.visible) {
-      this.getUserLocation();
-      this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/GeoVisible/' + this.lng + '/' + this.lat + '/' + this.alt).subscribe(result => {
-        this.featurecollections = result;
-      }, error => console.error(error));
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((location) => {
+          console.info(location);
+            this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisible/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString())).subscribe(result => {
+            this.featurecollections = result;
+          }, error => console.error(error));
+        });
+      } else {
+        this.router.navigate(['satellites']);
+      }
+
     }
     else {
       this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geolocations').subscribe(result => {
@@ -45,18 +50,6 @@ export class SatelliteComponent {
     }
   }
 
-  getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.lat = position.coords.latitude.toString();
-        this.lng = position.coords.longitude.toString();
-        this.alt = position.coords.altitude == null ? '3000': position.coords.altitude.toString();  
-      });
-                                             
-    } else {
-      // code for legacy browsers
-    }
-  };
 
   openModal(satellite:Feature) {
     const modalRef = this.modalService.open(ModalComponent,

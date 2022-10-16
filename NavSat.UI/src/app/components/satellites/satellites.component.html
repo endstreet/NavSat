@@ -1,6 +1,6 @@
-<h1 id="tableLabel">Satellites</h1>
+<h1 id="tableLabel"><ng-container *ngIf="visible">Visible</ng-container> Satellites</h1>
 
-<p>Satellites from API</p>
+<p><ng-container *ngIf="visible">Visible</ng-container> Satellites from API</p>
 
 <p *ngIf="!featurecollections"><em>Loading...</em></p>
 
