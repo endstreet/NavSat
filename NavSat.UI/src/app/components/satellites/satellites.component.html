@@ -1,60 +1,12 @@
-<h1 id="tableLabel"><ng-container *ngIf="visible">Visible</ng-container> Satellites</h1>
-
-<p><ng-container *ngIf="visible">Visible</ng-container> Satellites from API</p>
-
-<p *ngIf="!featurecollections"><em>Loading...</em></p>
-
-<ng-container *ngIf="featurecollections">
-  <div class="card">
-    <table *ngIf="featurecollections" class="table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Constelation</th>
-          <th>Health</th>
-          <th>Latitude</th>
-          <th>Longtitude</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let collection of featurecollections">
-          <tr *ngFor="let feature of collection.features">
-            <td>
-              <!--<button mat-button (click)="openDialog()">{{feature.properties.Name}}</button>-->
-              <button class="btn btn-sm btn-primary" (click)="openModal(feature)">{{feature.properties.Name}}</button>
-            </td>
-            <td>{{feature.properties.Constellation}}</td>
-            <td>
-              <svg viewBox="0 0 2 2" xmlns="http://www.w3.org/2000/svg" style="max-height:30px">
-                <circle cx="1" cy="1" r="0.4" [ngStyle]="{'fill': (feature.properties.IsHealthy ? 'green' : 'red') }" />
-              </svg>
-            </td>
-            <td>
-              {{feature.geometry.coordinates[0]}}
-            </td>
-            <td>
-              {{feature.geometry.coordinates[1]}}
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-</ng-container>
-
-
-
-<ng-template #mymodal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Satellite </h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    This is example from ItSolutionStuff.com
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
-  </div>
-</ng-template>
+<!-- Button to clear selection -->
+<button class="btn btn-secondary" (click)="clearSelection()">Clear Selection</button>
+<!-- AG Grid Angular Component -->
+<ag-grid-angular style="width: 100%; height: 100%"
+                 class="ag-theme-alpine"
+                 [columnDefs]="columnDefs"
+                 [defaultColDef]="defaultColDef"
+                 [rowData]="rowData$ | async"
+                 [rowSelection]="'multiple'"
+                 [animateRows]="true"
+                 (gridReady)="onGridReady($event)"
+                 (cellClicked)="onCellClicked($event)"></ag-grid-angular>

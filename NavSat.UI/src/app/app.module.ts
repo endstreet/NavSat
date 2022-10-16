@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { LogInComponent } from './components/log-in/log-in.component';
+import { AgGridModule } from 'ag-grid-angular';
 import { SatelliteComponent } from './components/satellites/satellites.component';
 import { MapComponent } from './components/map/map.component';
 import { SpystuffComponent } from './components/spystuff/spystuff.component';
@@ -19,6 +20,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthGuard } from './services/auth-guard.service';
 import { ModalComponent } from './modal/modal.component';
+
+
+
 
 
 @NgModule({
@@ -35,6 +39,7 @@ import { ModalComponent } from './modal/modal.component';
     HttpClientModule,
     NgbModule,
     AppRoutingModule,
+    AgGridModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
