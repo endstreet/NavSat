@@ -8,6 +8,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, GridReadyEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import { HealthCellRenderer } from './components/healthindicator.component';
+import { PopupCellRenderer } from './components/popupbutton.component';
 
 @Component({
   selector: 'app-satellites',
@@ -22,7 +23,7 @@ export class SatelliteComponent {
   public visible: any;
 
   columnDefs: ColDef[] = [
-    { field: 'features.0.properties.Name',headerName: 'Name' },
+    { field: 'features.0', headerName: 'Name', cellRenderer: PopupCellRenderer },
     { field: 'features.0.properties.Constellation', headerName: 'Constellation' },
     { field: 'features.0.properties.IsHealthy', headerName: 'Health', cellRenderer: HealthCellRenderer },
     { field: 'features.0.geometry.coordinates.0', headerName: 'Latitude' },
@@ -90,21 +91,4 @@ export class SatelliteComponent {
     });
   }
 
-    flattenObject = (obj:any, prefix = 'satellite') =>
-    Object.keys(obj).reduce((acc:any, k) => {
-      const pre = prefix.length ? `${prefix}.` : '';
-      if (
-        typeof obj[k] === 'object' &&
-        obj[k] !== null &&
-        Object.keys(obj[k]).length > 0
-      )
-      {
-        Object.assign(acc, this.flattenObject(obj[k], pre + k));
-      }
-      else
-      {
-        acc [pre + k] = obj[k];
-      }
-      return acc;
-    }, {});
 }

@@ -16,8 +16,6 @@ export class MapComponent implements OnInit {
   private map!: google.maps.Map
   private position!: GeolocationPosition
 
-  
-
   ngOnInit(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((location) => {
