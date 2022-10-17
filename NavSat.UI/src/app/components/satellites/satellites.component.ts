@@ -17,8 +17,8 @@ import { PopupCellRenderer } from './components/popupbutton.component';
 })
 export class SatelliteComponent {
 
-  public satellites?: [];
-  public selectedfeature: Feature | undefined;
+/*  public satellites?: [];*/
+/*  public selectedfeature: Feature | undefined;*/
 
   public visible: any;
 
@@ -42,7 +42,7 @@ export class SatelliteComponent {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private router: Router, private modalService: NgbModal) {
+    private router: Router) {
   }
   //load data from sever
   onGridReady(params: GridReadyEvent) {
@@ -70,25 +70,6 @@ export class SatelliteComponent {
   // Example using Grid's API
   clearSelection(): void {
     this.agGrid.api.deselectAll();
-  }
-
- 
-  openModal(satellite: Feature) {
-    const modalRef = this.modalService.open(ModalComponent,
-      {
-        scrollable: true,
-        windowClass: 'myCustomModalClass',
-        // keyboard: false,
-        // backdrop: 'static'
-      });
-
-    let data = satellite
-
-    modalRef.componentInstance.satellite = data;
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-    });
   }
 
 }
