@@ -17,13 +17,12 @@ export class HealthCellRenderer implements ICellRendererAngularComp {
   // gets called once before the renderer is used
   agInit(params: ICellRendererParams): void {
     this.cellValue = this.getValueToDisplay(params) ? "green" : "red";
-
   }
 
   // gets called whenever the user gets the cell to refresh
   refresh(params: ICellRendererParams) {
     // set value into cell again
-    this.cellValue = this.getValueToDisplay(params);
+    this.cellValue = this.getValueToDisplay(params) ? "green" : "red";
     return true;
   }
 
