@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Loader } from '@googlemaps/js-api-loader';
-import { Feature,FeatureCollection } from '../../services/satellitepathdata';
+import { Feature, FeatureCollection } from '../../services/satellitepathdata';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from '../../modal/modal.component';
 import { styles } from './mapstyles';
 import { colors } from './colors';
 
@@ -23,10 +25,8 @@ export class MapComponent implements OnInit {
 
   private flightPath!: google.maps.Polyline;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private modalService: NgbModal) {
   }
-
-
 
   ngOnInit(): void {
     if (navigator.geolocation) {
@@ -44,7 +44,7 @@ export class MapComponent implements OnInit {
               zoom: 6,
               styles: styles
             });
-
+            const image = "../../../assets/satellite.png";
             new google.maps.Marker({
               position: { lat: this.position.coords.latitude, lng: this.position.coords.longitude },
               map: this.map,
@@ -53,8 +53,20 @@ export class MapComponent implements OnInit {
             this.satellites.forEach(collection => {
               collection.features.forEach(satelite => {
                 this.path = [];
+
                 //console.log(satelite.properties.Name);
                 if (satelite.geometry.type == "LineString") {
+                  var g = Object.values(satelite.geometry.coordinates)[0];
+                  const marker =new google.maps.Marker({
+                    position: { lat: g[0], lng: g[1] },
+                    map: this.map,
+                    title: satelite.properties.Name,
+                    icon: image,
+                  });
+                  // Add a click listener for each marker, and set up the info window.
+                  marker.addListener('click', () => {
+                    this.openModal(satelite);
+                  });
                   Object.values(satelite.geometry.coordinates).forEach(co => this.path.push(new google.maps.LatLng({ lat: co[0], lng: co[1] })));
                   this.flightPath = new google.maps.Polyline({
                     path: this.path,
@@ -75,6 +87,24 @@ export class MapComponent implements OnInit {
       //todo: default position
     }
     
+  }
+
+  openModal(satellite: Feature) {
+    const modalRef = this.modalService.open(ModalComponent,
+      {
+        scrollable: true,
+        windowClass: 'myCustomModalClass',
+        // keyboard: false,
+        // backdrop: 'static'
+      });
+
+    let data = satellite
+
+    modalRef.componentInstance.satellite = data;
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+    });
   }
 }
 
