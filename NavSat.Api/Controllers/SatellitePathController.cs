@@ -9,7 +9,6 @@ using System.Text.Json;
 //using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace NavSat.Api.Controllers
 {
     
@@ -25,48 +24,71 @@ namespace NavSat.Api.Controllers
             _satellitePathService = satellitePathService;
             _mapper = mapper;
         }
-        // Date Format 2022-07-29T21:58:39
+        /// <summary>
+        /// Get all Satellites for Date
+        /// </summary>
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="forDate"></param>
+        /// <returns></returns>
         [HttpGet("Locations/{forDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations(DateTime? forDate = null)
+        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations( DateTimeOffset? forDate = null)
         {
 
-            DateTimeOffset forDateOffset = forDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)forDate, DateTimeKind.Utc);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(forDate == null ? DateTimeOffset.Now : forDate);
 
             return (IEnumerable<SatellitePath>)await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
         }
 
-        // Date Format 2022-07-29T21:58:39
-        [HttpGet("Visible/{atDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelites(DateTime? atDate = null)
+        /// <summary>
+        /// Get all Visible satellites for location
+        /// </summary>
+        /// <param name="atDate"></param>
+        /// <returns></returns>
+        [HttpGet("Visible/{lon}/{lat}/{alt}/{atDate?}")]
+        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelites(double lon, double lat, double alt, DateTimeOffset? atDate = null)
         {
-            DateTimeOffset forDateOffset = atDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)atDate, DateTimeKind.Utc);
+            GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
+            DateTimeOffset forDateOffset = (DateTimeOffset)(atDate == null ? DateTimeOffset.Now : atDate);
 
-            return await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
+            return await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
         }
 
 
-        //"latitude": -54.84178023604217,
-        //"longitude": 131.8674045921112,
-        //"altitude": 20183468.315013845
+        /// <summary>
+        /// Get all Visible satellites foa a location at a specific time
+        /// </summary>
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="fromDate">Optional</param>
+        /// <param name="toDate">Optional</param>
+        /// <returns></returns>
         [HttpGet("Visible/{lon}/{lat}/{alt}/{fromDate?}/{toDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelitePaths(double lon, double lat, double alt, [FromRoute] DateTime? fromDate = null, [FromRoute] DateTime? toDate = null)
+        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelitePaths(double lon, double lat, double alt, [FromRoute] DateTimeOffset? fromDate = null, [FromRoute] DateTimeOffset? toDate = null)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset fromDateOffset = fromDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)fromDate, DateTimeKind.Utc);
-            DateTimeOffset toDateOffset = toDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)toDate, DateTimeKind.Utc);
+            DateTimeOffset fromDateOffset = (DateTimeOffset)(fromDate == null ? DateTimeOffset.Now : fromDate);
+            DateTimeOffset toDateOffset = (DateTimeOffset)(toDate == null ? DateTimeOffset.Now : toDate);
 
             return (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromDuringAsync(atLocation, new List<DateTimeOffset> { fromDateOffset, toDateOffset });
         }
 
 
         //GeoJson Calls ----------------------------------------------------------------------------------------------------------
-        //[EnableCors("CorsPolicy")]
-        // Date Format 2022-07-29T21:58:39
+        /// <summary>
+        /// Get all Satellites for Date (GeoJSON)
+        /// </summary>
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="forDate"></param>
         [HttpGet("GeoLocations/{forDate?}")]
-        public async Task<string> GetSateliteLocationsGj(DateTime? forDate = null)
+        public async Task<string> GetSateliteLocationsGj(DateTimeOffset? forDate = null)
         {
 
-            DateTimeOffset forDateOffset = forDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)forDate, DateTimeKind.Utc);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(forDate == null ? DateTimeOffset.Now : forDate);
 
             var srcObject = await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
             //Map to FeatureCollection
@@ -75,29 +97,38 @@ namespace NavSat.Api.Controllers
             return JsonSerializer.Serialize(jObject);
         }
 
-        // Date Format 2022-07-29T21:58:39
-        [HttpGet("GeoVisible/{atDate?}")]
-        public async Task<string> GetVisibleSatelitesGj(DateTime? atDate = null)
-        {
-            DateTimeOffset forDateOffset = atDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)atDate, DateTimeKind.Utc);
-
-            var srcObject = await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
-
-            //Map to FeatureCollection
-            var jObject = srcObject.Select(x => _mapper.Map<FeatureCollection>(x));
-            //Convert to JSON
-            return JsonSerializer.Serialize(jObject);
-        }
-
-
-        //"latitude": -54.84178023604217,
-        //"longitude": 131.8674045921112,
-        //"altitude": 20183468.315013845
-        [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{fromDate?}/{toDate?}")]
-        public async Task<string> GetVisibleSatelitePathsGj(double lon, double lat, double alt, [FromRoute] DateTime? fromDate = null, [FromRoute] DateTime? toDate = null)
+        /// <summary>
+        /// Get all Visible satellites for location (GeoJSON)
+        /// </summary>
+        /// <param name="atDate"></param>
+        [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{atDate?}")]
+        public async Task<string> GetVisibleSatelitesGj(double lon, double lat, double alt, DateTimeOffset? atDate = null)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset fromDateOffset = fromDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)fromDate, DateTimeKind.Utc);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(atDate == null ? DateTimeOffset.Now : atDate);
+
+            var srcObject = await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
+
+            //Map to FeatureCollection
+            var jObject = srcObject.Select(x => _mapper.Map<FeatureCollection>(x));
+            //Convert to JSON
+            return JsonSerializer.Serialize(jObject);
+        }
+
+
+        /// <summary>
+        /// Get all Visible satellites foa a location at a specific time (GeoJSON)
+        /// </summary>
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="fromDate">Optional</param>
+        /// <param name="toDate">Optional</param>
+        [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{fromDate?}/{toDate?}")]
+        public async Task<string> GetVisibleSatelitePathsGj(double lon, double lat, double alt, [FromRoute] DateTimeOffset? fromDate = null, [FromRoute] DateTime? toDate = null)
+        {
+            GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
+            DateTimeOffset fromDateOffset = (DateTimeOffset)(fromDate == null ? DateTimeOffset.Now : fromDate);
             DateTimeOffset toDateOffset = toDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)toDate, DateTimeKind.Utc);
 
             //var srcObject = (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
