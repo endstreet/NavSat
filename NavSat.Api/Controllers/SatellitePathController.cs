@@ -30,16 +30,13 @@ namespace NavSat.Api.Controllers
         /// <summary>
         /// Get all Satellites for Date
         /// </summary>
-        /// <param name="lon"></param>
-        /// <param name="lat"></param>
-        /// <param name="alt"></param>
-        /// <param name="forDate"></param>
+        /// <param name="parameters">Optional</param>
         /// <returns></returns>
-        [HttpGet("Locations/{forDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations(DateTimeOffset? forDate = null)
+        [HttpGet("Locations/")]
+        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations([FromQuery] ApiforDateParameters parameters )
         {
 
-            DateTimeOffset forDateOffset = (DateTimeOffset)(forDate == null ? DateTimeOffset.Now : forDate);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
 
             return (IEnumerable<SatellitePath>)await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
         }
@@ -47,13 +44,16 @@ namespace NavSat.Api.Controllers
         /// <summary>
         /// Get all Visible satellites for location/date
         /// </summary>
-        /// <param name="atDate"></param>
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="parameters">Optional</param>
         /// <returns></returns>
-        [HttpGet("Visible/{lon}/{lat}/{alt}/{atDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelites(double lon, double lat, double alt, DateTimeOffset? atDate = null)
+        [HttpGet("VisibleFrom/{lon}/{lat}/{alt}/")]
+        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelites(double lon, double lat, double alt, [FromQuery] ApiforDateParameters parameters)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset forDateOffset = (DateTimeOffset)(atDate == null ? DateTimeOffset.Now : atDate);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
 
             return await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
         }
@@ -65,15 +65,14 @@ namespace NavSat.Api.Controllers
         /// <param name="lon"></param>
         /// <param name="lat"></param>
         /// <param name="alt"></param>
-        /// <param name="fromDate">Optional</param>
-        /// <param name="toDate">Optional</param>
+        /// <param name="parameters">Optional</param>
         /// <returns></returns>
-        [HttpGet("Visible/{lon}/{lat}/{alt}/{fromDate?}/{toDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelitePaths(double lon, double lat, double alt, [FromRoute] DateTimeOffset? fromDate = null, [FromRoute] DateTimeOffset? toDate = null)
+        [HttpGet("VisibleFromAt/{lon}/{lat}/{alt}/")]
+        public async Task<IEnumerable<SatellitePath>> GetVisibleSatelitePaths(double lon, double lat, double alt, [FromQuery] ApiforPeriodParameters parameters)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset fromDateOffset = (DateTimeOffset)(fromDate == null ? DateTimeOffset.Now : fromDate);
-            DateTimeOffset toDateOffset = (DateTimeOffset)(toDate == null ? DateTimeOffset.Now : toDate);
+            DateTimeOffset fromDateOffset = (DateTimeOffset)(parameters.FromDate == null ? DateTimeOffset.Now : parameters.FromDate);
+            DateTimeOffset toDateOffset = (DateTimeOffset)(parameters.ToDate == null ? DateTimeOffset.Now : parameters.ToDate);
 
             return (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromDuringAsync(atLocation, new List<DateTimeOffset> { fromDateOffset, toDateOffset });
         }
@@ -83,15 +82,12 @@ namespace NavSat.Api.Controllers
         /// <summary>
         /// Get all Satellites for Date (GeoJSON)
         /// </summary>
-        /// <param name="lon"></param>
-        /// <param name="lat"></param>
-        /// <param name="alt"></param>
-        /// <param name="forDate"></param>
-        [HttpGet("GeoLocations/{forDate?}")]
-        public async Task<string> GetSateliteLocationsGj(DateTimeOffset? forDate = null)
+        /// <param name="parameters">Optional</param>
+        [HttpGet("GeoLocations/")]
+        public async Task<string> GetSateliteLocationsGj([FromQuery] ApiforDateParameters parameters)
         {
 
-            DateTimeOffset forDateOffset = (DateTimeOffset)(forDate == null ? DateTimeOffset.Now : forDate);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
 
             var srcObject = await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
             //Map to FeatureCollection
@@ -103,12 +99,15 @@ namespace NavSat.Api.Controllers
         /// <summary>
         /// Get all Visible satellites for location/time (GeoJSON)
         /// </summary>
-        /// <param name="atDate"></param>
-        [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{atDate?}")]
-        public async Task<string> GetVisibleSatelitesGj(double lon, double lat, double alt, DateTimeOffset? atDate = null)
+        /// <param name="lon"></param>
+        /// <param name="lat"></param>
+        /// <param name="alt"></param>
+        /// <param name="parameters">Optional</param>
+        [HttpGet("GeoVisibleFrom/{lon}/{lat}/{alt}/")]
+        public async Task<string> GetVisibleSatelitesGj(double lon, double lat, double alt, [FromQuery] ApiforDateParameters parameters)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset forDateOffset = (DateTimeOffset)(atDate == null ? DateTimeOffset.Now : atDate);
+            DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
 
             var srcObject = await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
 
@@ -125,16 +124,13 @@ namespace NavSat.Api.Controllers
         /// <param name="lon"></param>
         /// <param name="lat"></param>
         /// <param name="alt"></param>
-        /// <param name="fromDate">Optional</param>
-        /// <param name="toDate">Optional</param>
-        [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{fromDate?}/{toDate?}")]
-        public async Task<string> GetVisibleSatelitePathsGj(double lon, double lat, double alt, [FromRoute] DateTimeOffset? fromDate = null, [FromRoute] DateTime? toDate = null)
+        /// <param name="parameters">Optional</param>
+        [HttpGet("GeoVisibleFromAt/{lon}/{lat}/{alt}/")]
+        public async Task<string> GetVisibleSatelitePathsGj(double lon, double lat, double alt, [FromQuery] ApiforPeriodParameters parameters)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset fromDateOffset = (DateTimeOffset)(fromDate == null ? DateTimeOffset.Now : fromDate);
-            DateTimeOffset toDateOffset = toDate == null ? DateTimeOffset.Now : DateTime.SpecifyKind((DateTime)toDate, DateTimeKind.Utc);
-
-            //var srcObject = (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
+            DateTimeOffset fromDateOffset = (DateTimeOffset)(parameters.FromDate == null ? DateTimeOffset.Now : parameters.FromDate);
+            DateTimeOffset toDateOffset = (DateTimeOffset)(parameters.ToDate == null ? DateTimeOffset.Now : parameters.ToDate);
 
             var srcObject = (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromDuringAsync(atLocation, new List<DateTimeOffset> { fromDateOffset, toDateOffset });
 
@@ -143,7 +139,6 @@ namespace NavSat.Api.Controllers
             //Convert to JSON
             return JsonSerializer.Serialize(jObject);
         }
-
 
     }
 }

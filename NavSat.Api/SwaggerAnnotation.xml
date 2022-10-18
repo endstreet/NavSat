@@ -4,6 +4,31 @@
         <name>NavSat.Api</name>
     </assembly>
     <members>
+        <member name="T:NavSat.Api.Controllers.ApiforDateParameters">
+            <summary>
+            Optional Date Parameter
+            </summary>
+        </member>
+        <member name="P:NavSat.Api.Controllers.ApiforDateParameters.ForDate">
+            <summary>
+            Optional Fordate
+            </summary>
+        </member>
+        <member name="T:NavSat.Api.Controllers.ApiforPeriodParameters">
+            <summary>
+            Optional Date Parameter
+            </summary>
+        </member>
+        <member name="P:NavSat.Api.Controllers.ApiforPeriodParameters.FromDate">
+            <summary>
+            Optional FromDate
+            </summary>
+        </member>
+        <member name="P:NavSat.Api.Controllers.ApiforPeriodParameters.ToDate">
+            <summary>
+            Optional ToDate
+            </summary>
+        </member>
         <member name="T:NavSat.Api.Controllers.SatellitePathController">
             <summary>
             SattlellitePath Controller
@@ -16,58 +41,56 @@
             <param name="satellitePathService"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetSateliteLocations(System.Nullable{System.DateTimeOffset})">
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetSateliteLocations(NavSat.Api.Controllers.ApiforDateParameters)">
             <summary>
             Get all Satellites for Date
+            </summary>
+            <param name="parameters">Optional</param>
+            <returns></returns>
+        </member>
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelites(System.Double,System.Double,System.Double,NavSat.Api.Controllers.ApiforDateParameters)">
+            <summary>
+            Get all Visible satellites for location/date
             </summary>
             <param name="lon"></param>
             <param name="lat"></param>
             <param name="alt"></param>
-            <param name="forDate"></param>
+            <param name="parameters">Optional</param>
             <returns></returns>
         </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelites(System.Double,System.Double,System.Double,System.Nullable{System.DateTimeOffset})">
-            <summary>
-            Get all Visible satellites for location/date
-            </summary>
-            <param name="atDate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitePaths(System.Double,System.Double,System.Double,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitePaths(System.Double,System.Double,System.Double,NavSat.Api.Controllers.ApiforPeriodParameters)">
             <summary>
             Get all Visible satellites at a location for period
             </summary>
             <param name="lon"></param>
             <param name="lat"></param>
             <param name="alt"></param>
-            <param name="fromDate">Optional</param>
-            <param name="toDate">Optional</param>
+            <param name="parameters">Optional</param>
             <returns></returns>
         </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetSateliteLocationsGj(System.Nullable{System.DateTimeOffset})">
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetSateliteLocationsGj(NavSat.Api.Controllers.ApiforDateParameters)">
             <summary>
             Get all Satellites for Date (GeoJSON)
+            </summary>
+            <param name="parameters">Optional</param>
+        </member>
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitesGj(System.Double,System.Double,System.Double,NavSat.Api.Controllers.ApiforDateParameters)">
+            <summary>
+            Get all Visible satellites for location/time (GeoJSON)
             </summary>
             <param name="lon"></param>
             <param name="lat"></param>
             <param name="alt"></param>
-            <param name="forDate"></param>
+            <param name="parameters">Optional</param>
         </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitesGj(System.Double,System.Double,System.Double,System.Nullable{System.DateTimeOffset})">
-            <summary>
-            Get all Visible satellites for location/time (GeoJSON)
-            </summary>
-            <param name="atDate"></param>
-        </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitePathsGj(System.Double,System.Double,System.Double,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTime})">
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.GetVisibleSatelitePathsGj(System.Double,System.Double,System.Double,NavSat.Api.Controllers.ApiforPeriodParameters)">
             <summary>
             Get all Visible satellites at a location for period (GeoJSON)
             </summary>
             <param name="lon"></param>
             <param name="lat"></param>
             <param name="alt"></param>
-            <param name="fromDate">Optional</param>
-            <param name="toDate">Optional</param>
+            <param name="parameters">Optional</param>
         </member>
     </members>
 </doc>

@@ -50,8 +50,7 @@ export class SatelliteComponent {
     if (this.visible) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((location) => {
-/*          console.info(location);*/
-          this.rowData$ = this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisible/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString()));
+          this.rowData$ = this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisiblefrom/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString()));
         });
       } else {
         this.router.navigate(['satellites']);

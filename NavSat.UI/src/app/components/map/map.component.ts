@@ -32,7 +32,7 @@ export class MapComponent implements OnInit {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((location) => {
         this.position = location;
-        this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisible/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) + '/10-01-2022 01:00/10-15-2022 01:00').subscribe(result => {
+        this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) + '?FromDate=10-01-2022%2001%3A00&ToDate=10-15-2022%2001%3A00').subscribe(result => {
           this.satellites = result;
           let loader = new Loader({
             apiKey: 'AIzaSyDAmDOAJBNxAt_sfi_OOBE4c25AUio1GHQ',
