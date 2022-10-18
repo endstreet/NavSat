@@ -41,7 +41,7 @@ export class MapComponent implements OnInit {
           loader.load().then(() => {
             this.map = new google.maps.Map(document.getElementById("gmap")!, {
               center: { lat: this.position.coords.latitude, lng: this.position.coords.longitude },
-              zoom: 6,
+              zoom: 3,
               styles: styles
             });
             const image = "../../../assets/satellite.png";
