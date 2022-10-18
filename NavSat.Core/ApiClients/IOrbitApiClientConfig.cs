@@ -6,6 +6,6 @@
         /// <summary>
         /// Points a base Url like https://www.gnssplanning.com/api/almanac
         /// </summary>
-        string BaseUrl { get; }
+        public string BaseUrl { get; }
     }
 }

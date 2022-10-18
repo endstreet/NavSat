@@ -23,24 +23,15 @@ namespace NavSat.Core.Tests
         public void Initialize()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IOrbitApiClientConfig, TestConfig>(x =>
-            new TestConfig());
-            //services.AddScoped<ISatOrbitMapper, SatOrbitMapper>();
+            services.AddSingleton<IOrbitApiClientConfig, TestConfig>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IOrbitApiClient, OrbitApiClient>(x =>
-            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<IMapper>()));
+            services.AddScoped<IOrbitApiClient, OrbitApiClient>();
             services.AddScoped<IConstellationService, ConstellationService>();
             services.AddScoped<IGeoMath, GeoMath>();
             services.AddScoped<ISatMath, SatMath>();
-            services.AddScoped<ISatelliteService, SatelliteService>(x =>
-            new SatelliteService(x.GetRequiredService<IConstellationService>()));
-
-            services.AddScoped<ISatellitePathService, SatellitePathService>(x =>
-            new SatellitePathService(x.GetRequiredService<IGeoMath>(), x.GetRequiredService<ISatMath>(), x.GetRequiredService<IOrbitApiClient>(), x.GetRequiredService<ISatelliteService>()));
-
+            services.AddScoped<ISatelliteService, SatelliteService>();
+            services.AddScoped<ISatellitePathService, SatellitePathService>();
             _serviceProvider = services.BuildServiceProvider();
-
-            
         }
 
 
@@ -64,10 +55,8 @@ namespace NavSat.Core.Tests
         public async Task SatellitePathService_SmokeTest()
         {
 
-
             // Arrange
             SatellitePathService _satellitePathService = (SatellitePathService)_serviceProvider.GetService<ISatellitePathService>();
-
 
             var capeTown = new GeoCoordinate()
             {

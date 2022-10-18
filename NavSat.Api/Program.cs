@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.ApiClients;
@@ -11,21 +12,18 @@ namespace NavSat.Api
         public static void Main(string[] args)
         {
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton<IOrbitApiClientConfig, OrbitApiClientConfig>(x =>
-            new OrbitApiClientConfig(builder.Configuration.GetValue<string>("OrbitApi:BaseUrl")));
+            builder.Services.AddSingleton<IOrbitApiClientConfig,OrbitApiClientConfig>(_ => new OrbitApiClientConfig( builder.Configuration.GetValue<string>("OrbitApi:BaseUrl")));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            builder.Services.AddScoped<IOrbitApiClient, OrbitApiClient>(x =>
-            new OrbitApiClient(x.GetRequiredService<IOrbitApiClientConfig>(), x.GetRequiredService<IMapper>()));
+            builder.Services.AddScoped<IOrbitApiClient, OrbitApiClient>();
             builder.Services.AddScoped<IConstellationService, ConstellationService>();
             builder.Services.AddScoped<IGeoMath, GeoMath>();
             builder.Services.AddScoped<ISatMath, SatMath>();
-            builder.Services.AddScoped<ISatelliteService, SatelliteService>(x =>
-            new SatelliteService(x.GetRequiredService<IConstellationService>()));
-            builder.Services.AddScoped<ISatellitePathService, SatellitePathService>(x =>
-            new SatellitePathService(x.GetRequiredService<IGeoMath>(), x.GetRequiredService<ISatMath>(), x.GetRequiredService<IOrbitApiClient>(), x.GetRequiredService<ISatelliteService>()));
+            builder.Services.AddScoped<ISatelliteService, SatelliteService>();
+            builder.Services.AddScoped<ISatellitePathService, SatellitePathService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -56,21 +54,10 @@ namespace NavSat.Api
                 app.UseAuthorization();
             }
 
-
-
             app.MapControllers();
 
             app.Run();
         }
     }
-    internal class OrbitApiClientConfig : IOrbitApiClientConfig
-    {
 
-        public string BaseUrl { get; }
-
-        public OrbitApiClientConfig(string baseurl)
-        {
-            BaseUrl = baseurl;
-        }
-    }
 }
