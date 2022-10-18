@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using NavSat.Api.Filters;
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.ApiClients;
@@ -24,9 +25,14 @@ namespace NavSat.Api
             builder.Services.AddScoped<ISatelliteService, SatelliteService>();
             builder.Services.AddScoped<ISatellitePathService, SatellitePathService>();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            //builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<HttpResponseExceptionFilter>();
+            });
             builder.Services.AddEndpointsApiExplorer();
+
+
             builder.Services.AddSwaggerGen(
                 c =>
                 {
@@ -44,7 +50,7 @@ namespace NavSat.Api
             });
 
             var app = builder.Build();
-
+            app.UseExceptionHandler("/error");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -54,6 +60,7 @@ namespace NavSat.Api
             }
             else
             {
+                
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
             }

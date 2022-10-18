@@ -92,5 +92,62 @@
             <param name="alt"></param>
             <param name="parameters">Optional</param>
         </member>
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.HandleError">
+            <summary>
+            Error endpoint
+            </summary>
+            <returns>Problem Details</returns>
+        </member>
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.HandleErrorDevelopment(Microsoft.Extensions.Hosting.IHostEnvironment)">
+            <summary>
+            Error endpoint
+            </summary>
+            <param name="hostEnvironment"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NavSat.Api.Filters.HttpResponseException">
+            <summary>
+            HttpResponse Exception
+            </summary>
+        </member>
+        <member name="M:NavSat.Api.Filters.HttpResponseException.#ctor(System.Int32,System.Object)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="statusCode"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:NavSat.Api.Filters.HttpResponseException.StatusCode">
+            <summary>
+            StatusCode
+            </summary>
+        </member>
+        <member name="P:NavSat.Api.Filters.HttpResponseException.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="T:NavSat.Api.Filters.HttpResponseExceptionFilter">
+            <summary>
+            ResponseException Filter
+            </summary>
+        </member>
+        <member name="P:NavSat.Api.Filters.HttpResponseExceptionFilter.Order">
+            <summary>
+            Order
+            </summary>
+        </member>
+        <member name="M:NavSat.Api.Filters.HttpResponseExceptionFilter.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Excecuting Action
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:NavSat.Api.Filters.HttpResponseExceptionFilter.OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext)">
+            <summary>
+            Executed Action
+            </summary>
+            <param name="context"></param>
+        </member>
     </members>
 </doc>

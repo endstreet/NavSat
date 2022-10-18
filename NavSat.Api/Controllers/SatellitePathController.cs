@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
@@ -140,5 +141,34 @@ namespace NavSat.Api.Controllers
             return JsonSerializer.Serialize(jObject);
         }
 
+        /// <summary>
+        /// Error endpoint
+        /// </summary>
+        /// <returns>Problem Details</returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Route("/error")]
+        public IActionResult HandleError() => Problem();
+
+        /// <summary>
+        /// Error endpoint
+        /// </summary>
+        /// <param name="hostEnvironment"></param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Route("/error-development")]
+        public IActionResult HandleErrorDevelopment( [FromServices] IHostEnvironment hostEnvironment)
+        {
+            if (!hostEnvironment.IsDevelopment())
+            {
+                return NotFound();
+            }
+
+            var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+
+            return Problem(
+                detail: exceptionHandlerFeature.Error.StackTrace,
+                title: exceptionHandlerFeature.Error.Message
+                );
+        }
     }
 }
