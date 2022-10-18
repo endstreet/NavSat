@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using NavSat.Core.Abstrations.Models;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Xml.Serialization;
 
 namespace NavSat.Core.ApiClients.Profiles
 {

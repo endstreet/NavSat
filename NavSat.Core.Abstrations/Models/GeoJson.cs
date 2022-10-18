@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NavSat.Core.Abstrations.Models
 {
@@ -20,7 +19,7 @@ namespace NavSat.Core.Abstrations.Models
     //    public string type { get => "LineString"; }
 
     //    public List<List<double>> coordinates { get; set; }
-        
+
     //}
     //public class PointGeometry : IGeometry<List<double>>
     //{
@@ -37,7 +36,7 @@ namespace NavSat.Core.Abstrations.Models
 
     public class FeatureCollection
     {
-        public string type { get => "FeatureCollection"; } 
+        public string type { get => "FeatureCollection"; }
         public List<Feature> features { get; set; }
     }
 

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>NavSat.Api.Program</StartupObject>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>SwaggerAnnotation.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

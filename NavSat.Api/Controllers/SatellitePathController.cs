@@ -1,25 +1,28 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
 using System.Text.Json;
-//using Newtonsoft.Json;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace NavSat.Api.Controllers
 {
-    
 
+    /// <summary>
+    /// SattlellitePath Controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SatellitePathController : ControllerBase
     {
         private readonly ISatellitePathService _satellitePathService;
         private readonly IMapper _mapper;
-        public SatellitePathController(ISatellitePathService satellitePathService,IMapper mapper)
+        /// <summary>
+        /// SattlellitePath Constructor
+        /// </summary>
+        /// <param name="satellitePathService"></param>
+        /// <param name="mapper"></param>
+        public SatellitePathController(ISatellitePathService satellitePathService, IMapper mapper)
         {
             _satellitePathService = satellitePathService;
             _mapper = mapper;
@@ -33,7 +36,7 @@ namespace NavSat.Api.Controllers
         /// <param name="forDate"></param>
         /// <returns></returns>
         [HttpGet("Locations/{forDate?}")]
-        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations( DateTimeOffset? forDate = null)
+        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations(DateTimeOffset? forDate = null)
         {
 
             DateTimeOffset forDateOffset = (DateTimeOffset)(forDate == null ? DateTimeOffset.Now : forDate);
@@ -42,7 +45,7 @@ namespace NavSat.Api.Controllers
         }
 
         /// <summary>
-        /// Get all Visible satellites for location
+        /// Get all Visible satellites for location/date
         /// </summary>
         /// <param name="atDate"></param>
         /// <returns></returns>
@@ -57,7 +60,7 @@ namespace NavSat.Api.Controllers
 
 
         /// <summary>
-        /// Get all Visible satellites foa a location at a specific time
+        /// Get all Visible satellites at a location for period
         /// </summary>
         /// <param name="lon"></param>
         /// <param name="lat"></param>
@@ -98,7 +101,7 @@ namespace NavSat.Api.Controllers
         }
 
         /// <summary>
-        /// Get all Visible satellites for location (GeoJSON)
+        /// Get all Visible satellites for location/time (GeoJSON)
         /// </summary>
         /// <param name="atDate"></param>
         [HttpGet("GeoVisible/{lon}/{lat}/{alt}/{atDate?}")]
@@ -117,7 +120,7 @@ namespace NavSat.Api.Controllers
 
 
         /// <summary>
-        /// Get all Visible satellites foa a location at a specific time (GeoJSON)
+        /// Get all Visible satellites at a location for period (GeoJSON)
         /// </summary>
         /// <param name="lon"></param>
         /// <param name="lat"></param>

@@ -34,7 +34,7 @@ namespace NavSat.Core.ApiClients
                 var uri = $"{_config.BaseUrl}/{utc.Year}/{utc.Month}/{utc.Day}";
 
                 string json = "";
-                
+
                 var res = await httpClient.GetAsync(uri);
                 // I suspect the requirement hinted at a middleware request filter.
                 // The EnsureSuccessStatusCode will throw the relevant exception anyways

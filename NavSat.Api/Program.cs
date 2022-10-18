@@ -1,5 +1,4 @@
-using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Services;
 using NavSat.Core.ApiClients;
@@ -16,7 +15,7 @@ namespace NavSat.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton<IOrbitApiClientConfig,OrbitApiClientConfig>(_ => new OrbitApiClientConfig( builder.Configuration.GetValue<string>("OrbitApi:BaseUrl")));
+            builder.Services.AddSingleton<IOrbitApiClientConfig, OrbitApiClientConfig>(_ => new OrbitApiClientConfig(builder.Configuration.GetValue<string>("OrbitApi:BaseUrl")));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<IOrbitApiClient, OrbitApiClient>();
             builder.Services.AddScoped<IConstellationService, ConstellationService>();
@@ -28,7 +27,12 @@ namespace NavSat.Api
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(
+                c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "NavSat API", Version = "v1" });
+                    c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "SwaggerAnnotation.xml"));
+                });
 
             builder.Services.AddCors(options =>
             {

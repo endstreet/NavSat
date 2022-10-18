@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NavSat.Core.Abstrations.ApiClients;
