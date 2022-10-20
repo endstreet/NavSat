@@ -21,7 +21,7 @@ export class MapComponent implements OnInit {
 
   private map!: google.maps.Map
   private position!: GeolocationPosition
-  private satellites!: FeatureCollection[]
+  private satellites!: Feature[]
   private path!: google.maps.LatLng[];
 
   private flightPath!: google.maps.Polyline;
@@ -33,8 +33,9 @@ export class MapComponent implements OnInit {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((location) => {
         this.position = location;
-        this.http.get<FeatureCollection[]>(ApiBaseUrl + '/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) ).subscribe(result => {
-          this.satellites = result;
+        this.http.get<FeatureCollection>(ApiBaseUrl + '/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) ).subscribe(result => {
+          this.satellites = result.features;
+          ///console.log(this.satellites);
           let loader = new Loader({
             apiKey: 'AIzaSyDAmDOAJBNxAt_sfi_OOBE4c25AUio1GHQ',
           });
@@ -45,14 +46,14 @@ export class MapComponent implements OnInit {
               zoom: 3,
               styles: styles
             });
-            const image = "../../../assets/satellite.png";
+            const sick = "../../../assets/sick.png";
+            const healthy = "../../../assets/healthy.png";
             new google.maps.Marker({
               position: { lat: this.position.coords.latitude, lng: this.position.coords.longitude },
               map: this.map,
             });
             var colorIndex: number =0;
-            this.satellites.forEach(collection => {
-              collection.features.forEach(satellite => {
+            this.satellites.forEach((satellite => {
                 this.path = [];
 
                 //Drawing lines
@@ -62,7 +63,7 @@ export class MapComponent implements OnInit {
                     position: { lat: g[0], lng: g[1] },
                     map: this.map,
                     title: satellite.properties.Name,
-                    icon: image,
+                    icon: satellite.properties.IsHealthy ? healthy:sick,
                   });
                   // Add a click listener for each marker, and set up the info window.
                   marker.addListener('click', () => {
@@ -78,8 +79,7 @@ export class MapComponent implements OnInit {
                   });
                   this.flightPath.setMap(this.map);
                 }
-              });
-            });
+            }));
           })
         }, error => console.error(error));
       });

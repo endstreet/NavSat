@@ -42,7 +42,7 @@ namespace NavSat.Core.ApiClients.Profiles
             StringBuilder result = new StringBuilder();
             result.Append(@"""properties"":{");
             result.Append($@"""Name"":""{src.DisplayName}"",");
-            result.Append($@"""IsHealthy"":""{src.Orbit.IsHealthy}"",");
+            result.Append($@"""IsHealthy"":{src.Orbit.IsHealthy.ToString().ToLower()},");
             result.Append($@"""Constellation"":""{src.Constellation}""");
             //Add more properties here...
             result.Append("},");
@@ -52,7 +52,8 @@ namespace NavSat.Core.ApiClients.Profiles
         string getGeometry(SatellitePath src)
         {
             StringBuilder result = new StringBuilder();
-            result.Append(@"{""type"": ""FeatureCollection"",""features"":[{""type"":""Feature"",");
+            //result.Append(@"""features"":[{""type"":""Feature"",");
+            result.Append(@"{""type"":""Feature"",");
             result.Append(getProperties(src));
             result.Append(@"""geometry"":");
 
@@ -66,7 +67,7 @@ namespace NavSat.Core.ApiClients.Profiles
                 string line = Newtonsoft.Json.JsonConvert.SerializeObject(new LineString(coordinates));
                 result.Append(Newtonsoft.Json.JsonConvert.SerializeObject(new LineString(coordinates)));
             }
-            result.Append("}]}");
+            result.Append("}");
             return result.ToString();
         }
         string getPoint(GeoCoordinate trace)

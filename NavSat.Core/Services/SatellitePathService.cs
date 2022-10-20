@@ -2,6 +2,7 @@
 using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
+using NavSat.Core.ApiClients.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,7 +137,7 @@ namespace NavSat.Core.Services
             var srcObject = await GetPathsAsAtAsync(at);
             //Map to FeatureCollection
             var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
-            return $"[{String.Join(",", json)}]";
+            return string.Join(",", json).WrapInFeatureCollection();
         }
 
         async Task<string> ISatellitePathService.GetGeoJSONAsSeenFromAsAtAsync(GeoCoordinate from, DateTimeOffset at)
@@ -144,7 +145,7 @@ namespace NavSat.Core.Services
             var srcObject = await GetAsSeenFromAsAtAsync(from, at);
             //Map to FeatureCollection
             var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
-            return $"[{String.Join(",", json)}]";
+            return string.Join(",", json).WrapInFeatureCollection();
         }
 
         async Task<string> ISatellitePathService.GetGeoJSONAsSeenFromDuringAsync(GeoCoordinate from, IEnumerable<DateTimeOffset> times)
@@ -152,7 +153,7 @@ namespace NavSat.Core.Services
             var srcObject = await GetAsSeenFromDuringAsync(from, times);
             //Map to FeatureCollection
             var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
-            return $"[{String.Join(",", json)}]";
+            return string.Join(",", json).WrapInFeatureCollection();
         }
     }
 }
