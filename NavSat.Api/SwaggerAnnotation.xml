@@ -34,7 +34,7 @@
             SattlellitePath Controller
             </summary>
         </member>
-        <member name="M:NavSat.Api.Controllers.SatellitePathController.#ctor(NavSat.Core.Abstrations.Services.ISatellitePathService,AutoMapper.IMapper)">
+        <member name="M:NavSat.Api.Controllers.SatellitePathController.#ctor(NavSat.Core.Abstrations.Services.ISatellitePathService)">
             <summary>
             SattlellitePath Constructor
             </summary>

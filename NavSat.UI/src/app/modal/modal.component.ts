@@ -1,4 +1,3 @@
-// modal.component.ts
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Feature } from '../services/satellitedata';
@@ -10,7 +9,9 @@ import { Feature } from '../services/satellitedata';
 })
 export class ModalComponent implements OnInit {
 
-  @Input() satellite!: Feature ;
+  @Input() satellite!: Feature;
+
+  @Input() coordinates!: any[];
 
   constructor(
     public activeModal: NgbActiveModal

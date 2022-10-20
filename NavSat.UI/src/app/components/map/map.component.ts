@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../modal/modal.component';
 import { styles } from './mapstyles';
 import { colors } from './colors';
+import { ApiBaseUrl } from './../../app.config';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class MapComponent implements OnInit {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((location) => {
         this.position = location;
-        this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) + '?FromDate=10-01-2022%2001%3A00&ToDate=10-15-2022%2001%3A00').subscribe(result => {
+        this.http.get<FeatureCollection[]>(ApiBaseUrl + '/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) ).subscribe(result => {
           this.satellites = result;
           let loader = new Loader({
             apiKey: 'AIzaSyDAmDOAJBNxAt_sfi_OOBE4c25AUio1GHQ',
@@ -51,23 +52,23 @@ export class MapComponent implements OnInit {
             });
             var colorIndex: number =0;
             this.satellites.forEach(collection => {
-              collection.features.forEach(satelite => {
+              collection.features.forEach(satellite => {
                 this.path = [];
 
-                //console.log(satelite.properties.Name);
-                if (satelite.geometry.type == "LineString") {
-                  var g = Object.values(satelite.geometry.coordinates)[0];
+                //Drawing lines
+                if (satellite.geometry.type == "LineString") {
+                  var g = Object.values(satellite.geometry.coordinates)[0];
                   const marker =new google.maps.Marker({
                     position: { lat: g[0], lng: g[1] },
                     map: this.map,
-                    title: satelite.properties.Name,
+                    title: satellite.properties.Name,
                     icon: image,
                   });
                   // Add a click listener for each marker, and set up the info window.
                   marker.addListener('click', () => {
-                    this.openModal(satelite);
+                    this.openModal(satellite);
                   });
-                  Object.values(satelite.geometry.coordinates).forEach(co => this.path.push(new google.maps.LatLng({ lat: co[0], lng: co[1] })));
+                  Object.values(satellite.geometry.coordinates).forEach(co => this.path.push(new google.maps.LatLng({ lat: co[0], lng: co[1] })));
                   this.flightPath = new google.maps.Polyline({
                     path: this.path,
                     geodesic: true,
@@ -101,6 +102,8 @@ export class MapComponent implements OnInit {
     let data = satellite
 
     modalRef.componentInstance.satellite = data;
+    modalRef.componentInstance.coordinates = Object.values(satellite.geometry.coordinates)[0];
+
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {

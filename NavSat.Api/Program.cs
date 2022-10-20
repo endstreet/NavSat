@@ -50,17 +50,18 @@ namespace NavSat.Api
             });
 
             var app = builder.Build();
-            app.UseExceptionHandler("/error");
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseExceptionHandler("/error-development");
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseCors(MyAllowSpecificOrigins);
             }
             else
             {
-                
+                app.UseExceptionHandler("/error");
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
             }

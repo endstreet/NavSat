@@ -1,13 +1,9 @@
 const PROXY_CONFIG = [
-
   {
     context: [
-      "/FeatureCollection",
+      "/api",
     ],
-    target: "https://localhost:5094",
+    target: "http://localhost:5091",
     secure: false
   }
 ]
-
-module.exports = PROXY_CONFIG;
-

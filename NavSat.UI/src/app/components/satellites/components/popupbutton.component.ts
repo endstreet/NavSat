@@ -45,6 +45,7 @@ export class PopupCellRenderer implements ICellRendererAngularComp {
     let data = satellite
 
     modalRef.componentInstance.satellite = data;
+    modalRef.componentInstance.coordinates = Object.values(satellite.geometry.coordinates);
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {

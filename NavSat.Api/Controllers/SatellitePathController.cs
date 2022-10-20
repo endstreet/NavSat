@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
-using System.Text.Json;
+//using Newtonsoft.Json;
 
 
 namespace NavSat.Api.Controllers
@@ -17,16 +16,16 @@ namespace NavSat.Api.Controllers
     public class SatellitePathController : ControllerBase
     {
         private readonly ISatellitePathService _satellitePathService;
-        private readonly IMapper _mapper;
+
         /// <summary>
         /// SattlellitePath Constructor
         /// </summary>
         /// <param name="satellitePathService"></param>
         /// <param name="mapper"></param>
-        public SatellitePathController(ISatellitePathService satellitePathService, IMapper mapper)
+        public SatellitePathController(ISatellitePathService satellitePathService)
         {
             _satellitePathService = satellitePathService;
-            _mapper = mapper;
+
         }
         /// <summary>
         /// Get all Satellites for Date
@@ -34,7 +33,7 @@ namespace NavSat.Api.Controllers
         /// <param name="parameters">Optional</param>
         /// <returns></returns>
         [HttpGet("Locations/")]
-        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations([FromQuery] ApiforDateParameters parameters )
+        public async Task<IEnumerable<SatellitePath>> GetSateliteLocations([FromQuery] ApiforDateParameters parameters)
         {
 
             DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
@@ -90,11 +89,8 @@ namespace NavSat.Api.Controllers
 
             DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
 
-            var srcObject = await _satellitePathService.GetPathsAsAtAsync(forDateOffset);
-            //Map to FeatureCollection
-            var jObject = srcObject.Select(x => _mapper.Map<FeatureCollection>(x));
-            //Convert to JSON
-            return JsonSerializer.Serialize(jObject);
+            return await _satellitePathService.GetGeoJSONPathsAsAtAsync(forDateOffset);
+
         }
 
         /// <summary>
@@ -109,13 +105,7 @@ namespace NavSat.Api.Controllers
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
             DateTimeOffset forDateOffset = (DateTimeOffset)(parameters.ForDate == null ? DateTimeOffset.Now : parameters.ForDate);
-
-            var srcObject = await _satellitePathService.GetAsSeenFromAsAtAsync(atLocation, forDateOffset);
-
-            //Map to FeatureCollection
-            var jObject = srcObject.Select(x => _mapper.Map<FeatureCollection>(x));
-            //Convert to JSON
-            return JsonSerializer.Serialize(jObject);
+            return await _satellitePathService.GetGeoJSONAsSeenFromAsAtAsync(atLocation, forDateOffset);
         }
 
 
@@ -130,15 +120,10 @@ namespace NavSat.Api.Controllers
         public async Task<string> GetVisibleSatelitePathsGj(double lon, double lat, double alt, [FromQuery] ApiforPeriodParameters parameters)
         {
             GeoCoordinate atLocation = new GeoCoordinate() { Altitude = alt, Longitude = lon, Latitude = lat };
-            DateTimeOffset fromDateOffset = (DateTimeOffset)(parameters.FromDate == null ? DateTimeOffset.Now : parameters.FromDate);
+            DateTimeOffset fromDateOffset = (DateTimeOffset)(parameters.FromDate == null ? DateTimeOffset.Now.AddDays(-14) : parameters.FromDate);
             DateTimeOffset toDateOffset = (DateTimeOffset)(parameters.ToDate == null ? DateTimeOffset.Now : parameters.ToDate);
 
-            var srcObject = (IEnumerable<SatellitePath>)await _satellitePathService.GetAsSeenFromDuringAsync(atLocation, new List<DateTimeOffset> { fromDateOffset, toDateOffset });
-
-            //Map to FeatureCollection
-            var jObject = srcObject.Select(x => _mapper.Map<FeatureCollection>(x));
-            //Convert to JSON
-            return JsonSerializer.Serialize(jObject);
+            return await _satellitePathService.GetGeoJSONAsSeenFromDuringAsync(atLocation, new List<DateTimeOffset> { fromDateOffset, toDateOffset });
         }
 
         /// <summary>
@@ -156,7 +141,7 @@ namespace NavSat.Api.Controllers
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)]
         [Route("/error-development")]
-        public IActionResult HandleErrorDevelopment( [FromServices] IHostEnvironment hostEnvironment)
+        public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)
         {
             if (!hostEnvironment.IsDevelopment())
             {

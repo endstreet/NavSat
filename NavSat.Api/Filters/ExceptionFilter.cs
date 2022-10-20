@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NavSat.Api.Filters
 {
@@ -14,7 +14,7 @@ namespace NavSat.Api.Filters
         /// </summary>
         /// <param name="statusCode"></param>
         /// <param name="value"></param>
-        public HttpResponseException(int statusCode, object? value = null) =>  (StatusCode, Value) = (statusCode, value);
+        public HttpResponseException(int statusCode, object? value = null) => (StatusCode, Value) = (statusCode, value);
 
         /// <summary>
         /// StatusCode

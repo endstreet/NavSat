@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from '../../modal/modal.component';
-import { Feature, FeatureCollection } from '../../services/satellitedata';
+import { FeatureCollection } from '../../services/satellitedata';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, GridReadyEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import { HealthCellRenderer } from './components/healthindicator.component';
 import { PopupCellRenderer } from './components/popupbutton.component';
+import { ApiBaseUrl } from './../../app.config';
 
 @Component({
   selector: 'app-satellites',
@@ -17,10 +16,9 @@ import { PopupCellRenderer } from './components/popupbutton.component';
 })
 export class SatelliteComponent {
 
-/*  public satellites?: [];*/
-/*  public selectedfeature: Feature | undefined;*/
 
   public visible: any;
+
 
   columnDefs: ColDef[] = [
     { field: 'features.0', headerName: 'Name', cellRenderer: PopupCellRenderer },
@@ -37,27 +35,27 @@ export class SatelliteComponent {
   };
 
   // Data that gets displayed in the grid
-  public rowData$!: Observable<any[]>;
+  public rowData$!: Observable<any>;
   // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private router: Router) {
-  }
-  //load data from sever
+    private router: Router) { }
+
+
   onGridReady(params: GridReadyEvent) {
     this.visible = this.route.snapshot.paramMap.get('filter')!;
     if (this.visible) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((location) => {
-          this.rowData$ = this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geovisiblefrom/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString()));
+          this.rowData$ = this.http.get<FeatureCollection[]>(ApiBaseUrl +'/geovisiblefrom/' + location.coords.longitude.toString() + '/' + location.coords.latitude.toString() + '/' + (location.coords.altitude == null ? '3000' : location.coords.altitude.toString()));
         });
       } else {
         this.router.navigate(['satellites']);
       }
     }
     else {
-      this.rowData$ = this.http.get<FeatureCollection[]>('http://localhost:5091/api/satellitepath/geolocations');//.forEach(element => this.satellites.push(element));;
+      this.rowData$ = this.http.get<FeatureCollection[]>(ApiBaseUrl + '/geolocations');
     }
   }
 

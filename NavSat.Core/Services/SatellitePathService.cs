@@ -1,4 +1,5 @@
-﻿using NavSat.Core.Abstrations.ApiClients;
+﻿using AutoMapper;
+using NavSat.Core.Abstrations.ApiClients;
 using NavSat.Core.Abstrations.Models;
 using NavSat.Core.Abstrations.Services;
 using System;
@@ -14,13 +15,15 @@ namespace NavSat.Core.Services
         private readonly IOrbitApiClient _orbitApiClient;
         private readonly ISatMath _satMath;
         private readonly ISatelliteService _satService;
+        private readonly IMapper _mapper;
 
-        public SatellitePathService(IGeoMath geoMath, ISatMath satMath, IOrbitApiClient orbitApiClient, ISatelliteService satService)
+        public SatellitePathService(IGeoMath geoMath, ISatMath satMath, IOrbitApiClient orbitApiClient, ISatelliteService satService, IMapper mapper)
         {
             this._geoMath = geoMath;
             this._satMath = satMath;
             this._orbitApiClient = orbitApiClient;
             this._satService = satService;
+            this._mapper = mapper;
         }
 
         public async Task<IEnumerable<SatellitePath>> GetPathsAsAtAsync(DateTimeOffset at)
@@ -128,6 +131,28 @@ namespace NavSat.Core.Services
 
         }
 
+        async Task<string> ISatellitePathService.GetGeoJSONPathsAsAtAsync(DateTimeOffset at)
+        {
+            var srcObject = await GetPathsAsAtAsync(at);
+            //Map to FeatureCollection
+            var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
+            return $"[{String.Join(",", json)}]";
+        }
 
+        async Task<string> ISatellitePathService.GetGeoJSONAsSeenFromAsAtAsync(GeoCoordinate from, DateTimeOffset at)
+        {
+            var srcObject = await GetAsSeenFromAsAtAsync(from, at);
+            //Map to FeatureCollection
+            var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
+            return $"[{String.Join(",", json)}]";
+        }
+
+        async Task<string> ISatellitePathService.GetGeoJSONAsSeenFromDuringAsync(GeoCoordinate from, IEnumerable<DateTimeOffset> times)
+        {
+            var srcObject = await GetAsSeenFromDuringAsync(from, times);
+            //Map to FeatureCollection
+            var json = srcObject.Select(x => _mapper.Map<string>(x)).ToList();
+            return $"[{String.Join(",", json)}]";
+        }
     }
 }
