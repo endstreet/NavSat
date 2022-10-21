@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../modal/modal.component';
 import { styles } from './mapstyles';
 import { colors } from './colors';
-import { ApiBaseUrl } from './../../app.config';
+import { ApiBaseUrl, GoogleApiKey } from './../../app.config';
 
 
 @Component({
@@ -35,9 +35,8 @@ export class MapComponent implements OnInit {
         this.position = location;
         this.http.get<FeatureCollection>(ApiBaseUrl + '/geovisiblefromat/' + this.position.coords.longitude.toString() + '/' + this.position.coords.latitude.toString() + '/' + (this.position.coords.altitude == null ? '3000' : this.position.coords.altitude.toString()) ).subscribe(result => {
           this.satellites = result.features;
-          ///console.log(this.satellites);
           let loader = new Loader({
-            apiKey: 'AIzaSyDAmDOAJBNxAt_sfi_OOBE4c25AUio1GHQ',
+            apiKey: GoogleApiKey,
           });
 
           loader.load().then(() => {

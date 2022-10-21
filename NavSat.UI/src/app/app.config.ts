@@ -1,1 +1,4 @@
-export const ApiBaseUrl = "http://localhost:5091/api/satellitepath"
+export const
+ApiBaseUrl = "http://localhost:5091/api/satellitepath",
+GoogleApiKey = "--GoogleApiKey--"
+
